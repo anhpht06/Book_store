@@ -1,9 +1,6 @@
-import React from 'react'
+import React from "react";
+import TypeBook from "@/components/typeBook";
 
 export default function page() {
-  return (
-    <div>
-      type book
-    </div>
-  )
+  return <TypeBook />;
 }
