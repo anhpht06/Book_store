@@ -11,7 +11,7 @@ export default class CategoryBook extends BaseModel {
   @column()
   declare type_book_id: number
   @column()
-  declare name_categoty: string
+  declare name_category: string
 
   
   @column.dateTime({ autoCreate: true })

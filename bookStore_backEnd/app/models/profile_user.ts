@@ -28,7 +28,7 @@ export default class ProfileUser extends BaseModel {
   @column()
   declare avatar: String
 
-  @belongsTo(() => User)
+  @belongsTo(() => User, { foreignKey: 'user_id' })
   declare user: BelongsTo<typeof User>
 
   @column.dateTime({ autoCreate: true })

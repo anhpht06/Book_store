@@ -6,17 +6,21 @@ router
   .group(() => {
     router.post('/register', [UsersController, 'register'])
     router.post('/login', [UsersController, 'login'])
+    router.get("/login/:email", [UsersController, 'getIdUserByEmail'])
     router.post('/logout', [UsersController, 'logout'])
     router.delete('/delete/:id', [UsersController, 'delete'])
     router
       .group(() => {
-        router.post('/:id', [UsersController, 'updateProfieUser'])
+        router.get('', [UsersController, 'getAllUser'])
+        router.get('/:id', [UsersController, 'getProUserById'])
+        router.put('/:id', [UsersController, 'updateProfieUser'])
       })
       .prefix('/profile-user')
   })
   .prefix('/user')
 router
   .group(() => {
+    router.get('/:id', [BooksController, 'getTypeBookById'])
     router.get('', [BooksController, 'showListTypeBook'])
     router.post('/create', [BooksController, 'createTypeBook'])
     router.patch('/update/:id', [BooksController, 'updateTypeBook'])
@@ -25,6 +29,7 @@ router
   .prefix('/type-book')
 router
   .group(() => {
+    router.get('', [BooksController, 'showListCategoryBook'])
     router.get('/:id', [BooksController, 'showListCategoryBookToType'])
     router.post('/create', [BooksController, 'createCategoryBook'])
     router.patch('/update/:id', [BooksController, 'updateCategotyBook'])
@@ -41,9 +46,13 @@ router
   .prefix('/auther')
 router
   .group(() => {
-    router.get('', [BooksController, 'showListBookToID'])
+    router.get('/detail-book/:id', [BooksController, 'showDetailBookByIdBook'])
+    router.get('/category/:id', [BooksController, 'showListBookByIdCategory'])
+    router.get('', [BooksController, 'showAllListBooks'])
+    router.get ('/:id',[BooksController,'showBookById'])
     router.post('/create', [BooksController, 'createBook'])
     router.patch('/update/:id', [BooksController, 'updateBook'])
     router.delete('/delete/:id', [BooksController, 'deleteBook'])
+
   })
   .prefix('/books')

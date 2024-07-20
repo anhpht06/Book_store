@@ -22,7 +22,7 @@ export default class DetailBook extends BaseModel {
   @column()
   declare amount: number
   
-  @belongsTo(() => Book)
+  @belongsTo(() => Book, { foreignKey: 'book_id' })
   declare book: BelongsTo<typeof Book>
   
   @column.dateTime({ autoCreate: true })

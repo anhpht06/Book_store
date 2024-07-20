@@ -2,13 +2,15 @@ import ProfileUser from '#models/profile_user'
 import User from '#models/user'
 import { createUserValidators } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
+import { messages } from '@vinejs/vine/defaults'
 
 export default class UsersController {
   async register(ctx: HttpContext) {
     const userdata = await createUserValidators.validate(ctx.request.body())
     const user = await User.create(userdata)
-    const profile_user = await ProfileUser.create({ user_id: user.id })
-    console.log(profile_user)
+
+    await ProfileUser.create({ user_id: user.id })
+
     return ctx.response.ok(user)
   }
 
@@ -36,7 +38,10 @@ export default class UsersController {
     const user = await User.findOrFail(ctx.params.id)
     console.log(user)
     await user.delete()
-    return ctx.response.ok('xoa thanh cong')
+    return ctx.response.ok({
+      status: 'SUCCESS',
+      messages: 'delete success',
+    })
   }
 
   async updateProfieUser(ctx: HttpContext) {
@@ -44,5 +49,25 @@ export default class UsersController {
     profileUser.merge(ctx.request.body())
     await profileUser.save()
     return ctx.response.ok(profileUser)
+  }
+
+  async getAllUser(ctx: HttpContext) {
+    const users = await User.all()
+    return ctx.response.ok(users)
+  }
+
+  async getProUserById(ctx: HttpContext) {
+    const profileUser = await ProfileUser.query()
+      .where('user_id', ctx.params.id)
+      .preload('user')
+      .first()
+    return ctx.response.ok({
+      status: 'SUCCESS',
+      data: profileUser,
+    })
+  }
+  async getIdUserByEmail(ctx: HttpContext) {
+    const user = await User.query().where('email', ctx.params.email)
+    return ctx.response.ok(user)
   }
 }

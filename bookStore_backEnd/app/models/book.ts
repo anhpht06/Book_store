@@ -28,13 +28,17 @@ export default class Book extends BaseModel {
   @hasOne(() => DetailBook)
   declare detailBook: HasOne<typeof DetailBook>
 
-  @belongsTo(() => TypeBook)
+  @belongsTo(() => TypeBook,{
+    foreignKey: 'type_book_id'})
   declare typeBook: BelongsTo<typeof TypeBook>
 
-  @belongsTo(() => CategoryBook)
+  @belongsTo(() => CategoryBook,{
+    foreignKey: 'category_id',
+  })
   declare catetoryBook: BelongsTo<typeof CategoryBook>
 
-  @belongsTo(() => Auther)
+  @belongsTo(() => Auther,{
+    foreignKey: 'auther_id',})
   declare auther: BelongsTo<typeof Auther>
 
   @column.dateTime({ autoCreate: true })
