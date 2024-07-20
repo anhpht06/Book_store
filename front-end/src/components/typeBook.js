@@ -1,28 +1,31 @@
-"use client";
-
 import React from "react";
-import StypeBook from "@/services/book/typeBook";
+import ScategoryBook from "../services/book/categoryBook";
+import DropdownCategoryBook from "./DropdownCategoryBook";
 
 import { useState, useEffect } from "react";
-export default function TypeBook() {
-  const [typeBooks, setTypeBooks] = useState([]);
+import { SgetTypeBookById } from "../services/book/typeBook";
+export default function CtypeBook({ id }) {
+  const [category, setCategory] = useState([]);
+  const [typeBook, setTypeBook] = useState([]);
 
   useEffect(
     () => async () => {
-      const response = await StypeBook();
-      setTypeBooks(response.data);
-      console.log(response.data);
+      const res1 = await ScategoryBook(id);
+      setCategory(res1.data);
+      console.log(res1.data);
+      const res2 = await SgetTypeBookById(id);
+      setTypeBook(res2.data);
     },
     []
   );
 
   return (
-    <div>
-      <ul>
-        {typeBooks.map((typeBook) => (
-          <li key={typeBook.id}>{typeBook.nameType}</li>
-        ))}
-      </ul>
+    <div className="flex  items-center  m-5 ml-10 mt-10 ">
+      <h1 className="text-5xl font-bold ">{typeBook?.nameType}</h1>
+
+      <div className="ml-6">
+        <DropdownCategoryBook category={category} />
+      </div>
     </div>
   );
 }

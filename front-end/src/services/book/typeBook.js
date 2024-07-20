@@ -9,3 +9,13 @@ export default async function StypeBook() {
     return error;
   }
 }
+
+export async function SgetTypeBookById(id) {
+  try {
+    const response = await axios.get("http://localhost:3333/type-book/" + id);
+
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+}

@@ -1,10 +1,9 @@
 import React from "react";
-import CategoryBook from "@/components/categoryBook";
 
 export default function page() {
   return (
     <div>
-      <CategoryBook />
+      <h1>categoryBook</h1>
     </div>
   );
 }

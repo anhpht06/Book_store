@@ -15,10 +15,13 @@ export default function Login() {
     event.preventDefault();
     setLoading(true);
     const response = await Slogin(email, password);
+
     try {
       if (response?.data) {
         window.location.href = "/";
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("idUser", response.profile?.[0].id);
+        localStorage.setItem("role", response.profile?.[0].role);
       } else {
         setError(response.error);
       }
@@ -36,7 +39,7 @@ export default function Login() {
   };
   return (
     <div className=" flex justify-center bg-gray-500 fixed w-full h-full  ">
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen ">
         <form
           onSubmit={handleSubmit}
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -97,7 +100,8 @@ export default function Login() {
           <div className="flex items-center justify-between">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-blue-600  text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110 hover:bg-indigo-700 duration-300 hover:text-red-500"
+              disabled={loading}
             >
               {loading ? "Loading..." : "Sign In"}
             </button>

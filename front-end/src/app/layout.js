@@ -12,10 +12,10 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
       </head>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning={true}>
         <Header />
         {children}
-        <Footer />
+        {/* <Footer /> */}
       </body>
     </html>
   );

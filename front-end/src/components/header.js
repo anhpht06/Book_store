@@ -2,17 +2,35 @@
 import React from "react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+
+import StypeBook from "@/services/book/typeBook";
+import { useParams, usePathname } from "next/navigation";
+
 export default function Header() {
+  const currentTypeBook = usePathname().split("/type-book/")[1] || "";
+
   function handleLogout() {
     if (confirm("Do you want to logout?")) {
       localStorage.removeItem("token");
+      localStorage.removeItem("idUser");
+      localStorage.removeItem("role");
       window.location.href = "/login";
     } else {
       alert("well come back");
     }
   }
-  //check login => when login susecc change buton login to profile
+
+  const [typeBook, setTypeBook] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
+  const[role,setRole]=useState([]);
+
+  useEffect(
+    () => async () => {
+      const response = await StypeBook();
+      setTypeBook(response.data);
+    },
+    []
+  );
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -20,58 +38,48 @@ export default function Header() {
     } else {
       setIsLogin(false);
     }
-  }, []);
 
-  const [navigation, setNavigation] = useState([
-    { name: "Home", href: "/", current: false },
-    { name: "Type Book", href: "/type-book", current: false },
-    { name: "Category Book", href: "/category-book", current: false },
-  ]);
+    const role = localStorage.getItem("role");
+    if (role === "admin") {
+      setRole(true);
+    }else if(role === "user"){
+      setRole(false);
+    }
+  }, [isLogin, role]);
 
-  const handleNavigationClick = (href) => {
-    const updatedNavigation = navigation.map((item) => ({
-      ...item,
-      current: item.href === href,
-    }));
-    setNavigation(updatedNavigation);
-  };
-
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
-
+  useEffect(() => {}, []);
   return (
     <main>
-      <nav className="bg-gray-800">
+      <nav className="bg-gray-800  ">
         <div className=" px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center ">
-            <img
-              alt="Your Company"
-              src="https://cdn-icons-png.freepik.com/512/5320/5320512.png"
-              className="h-14 w-auto"
-            />
+            <Link href={"/"}>
+              <img
+                src="https://cdn-icons-png.freepik.com/512/5320/5320512.png"
+                className="h-14 w-auto"
+              />
+            </Link>
             <div className=" m-3 flex space-x-1">
-              {navigation.map((item) => (
+              {typeBook?.map((item) => (
                 <Link
-                  onClick={() => handleNavigationClick(item.href)}
-                  key={item.name}
-                  href={item.href}
-                  aria-current={item.current ? "page" : undefined}
-                  className={classNames(
-                    item.current
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "rounded-md px-3 py-2 text-sm font-medium"
-                  )}
+                  key={item.id}
+                  href={"/type-book/" + item.id}
+                  className={` 
+                       hover:bg-gray-700 hover:text-white
+                    rounded-md px-3 py-2 text-sm font-medium ${
+                      currentTypeBook == item.id
+                        ? "bg-gray-700 text-white"
+                        : "text-white"
+                    }`}
                 >
-                  {item.name}
+                  {item.nameType}
                 </Link>
               ))}
             </div>
             <div className="ml-auto px-2 ">
               {isLogin ? (
                 <Link
-                  href={"/profile"}
+                  href={"/profile/" + localStorage.getItem("idUser")}
                   className="bg-blue-600 hover:bg-blue-400 hover:text-white text-black font-semibold py-2 px-4 rounded-full shadow-md mr-5 "
                 >
                   profile
@@ -99,6 +107,17 @@ export default function Header() {
                 >
                   register
                 </Link>
+              )}
+
+              {role ? (
+                <Link
+                  href={"/settings"}
+                  className="bg-blue-600 hover:bg-blue-400 hover:text-white text-black font-semibold py-2 px-4 rounded-full shadow-md mr-5 "
+                >
+                  Settings
+                </Link>
+              ) : (
+                ""
               )}
             </div>
           </div>
