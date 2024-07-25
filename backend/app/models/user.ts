@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasOne } from '@adonisjs/lucid/orm'
-
+import { BaseModel, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
 import { JwtAccessTokenProvider, JwtSecret } from '#providers/jwt_access_token_provider'
 import parseDuration from 'parse-duration'
 
@@ -9,7 +9,7 @@ import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import ProfileUser from './profile_user.js'
 import type { HasOne } from '@adonisjs/lucid/types/relations'
-
+import Cart from './cart.js'
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
   passwordColumnName: 'password',
@@ -34,6 +34,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @hasMany(() => Cart)
+  declare carts: HasMany<typeof Cart>
 
   static accessTokens = JwtAccessTokenProvider.forModel(User, {
     expiresInMillis: parseDuration('1 day')!,
