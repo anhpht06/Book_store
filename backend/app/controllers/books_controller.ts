@@ -180,7 +180,7 @@ export default class BooksController {
     }
 
     const dataDetail = {
-      book_id: book .id,
+      book_id: book.id,
       price: data.price,
       amount: data.amount,
       description: data.description,
@@ -191,10 +191,44 @@ export default class BooksController {
     return ctx.response.ok({ status: '200', messages: 'success', data: book })
   }
   async updateBook(ctx: HttpContext) {
-    const book = await Book.findOrFail(ctx.params.id)
-    book.merge(ctx.request.body())
-    await book.save()
-    return ctx.response.ok({ messages: 'update success', data: book })
+    const dataBook = await Book.findOrFail(ctx.params.id)
+    const dataDetail = await DetailBook.query().where('book_id', ctx.params.id).first()
+
+    const data = ctx.request.body()
+    const file = ctx.request.file('image_book')
+    if (file) {
+      const result = await cloudinary.uploader.upload(file?.tmpPath!, {
+        folder: 'book_image',
+      })
+      data.image_book = result.url
+    }
+
+    const dataBookChange = {
+      name_book: data.name_book,
+      type_book_id: data.type_book_id,
+      category_id: data.category_id,
+      auther_id: data.auther_id,
+      image_book: data.image_book,
+    }
+
+    dataBook.merge(dataBookChange)
+    await dataBook.save()
+
+    const dataDetailChange = {
+      price: data.price,
+      amount: data.amount,
+      description: data.description,
+      publisher: data.publisher,
+    }
+    dataDetail?.merge(dataDetailChange)
+    await dataDetail?.save()
+
+    return ctx.response.ok({
+      status: '200',
+      messages: 'update success',
+      data: dataBook,
+      dataDetail,
+    })
   }
   async deleteBook(ctx: HttpContext) {
     const book = await Book.findBy('id', ctx.params.id)

@@ -53,7 +53,7 @@ router
     router.get('', [BooksController, 'showAllListBooks'])
     router.get('/:id', [BooksController, 'showBookById'])
     router.post('/create', [BooksController, 'createBook'])
-    router.patch('/update/:id', [BooksController, 'updateBook'])
+    router.put('/update/:id', [BooksController, 'updateBook'])
     router.delete('/delete/:id', [BooksController, 'deleteBook'])
   })
   .prefix('/books')
