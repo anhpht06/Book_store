@@ -21,6 +21,7 @@ export default function CdetailBook({ idBook, book }) {
 
       if (respones?.status === "200") {
         setDetailBook(respones?.data);
+        console.log("data",)
       } else if (respones?.status === "404") {
         setError(respones?.messages);
       }
@@ -161,21 +162,7 @@ export default function CdetailBook({ idBook, book }) {
                   : "mt-12 line-clamp-none text-justify"
               }
             >
-              Bạn có thể lựa chọn kiểm soát sự tập trung của mình, hoặc để người
-              khác đánh cắp nó. Khi bạn học cách tránh xa các hoạt động kích
-              thích cao độ gây phá hủy khả năng bình tĩnh và tập trung, bạn sẽ
-              thấy mình có thể giải quyết các nhiệm vụ quan trọng ở mức dễ dàng
-              hơn bao giờ hết. Thực hiện quá trình giải độc dopamine sẽ giúp bạn
-              giảm mức độ kích thích và đảm bảo bản thân hoàn thành các công
-              việc chính. Hãy nhớ rằng sự phấn khích và thỏa mãn là hai điều
-              khác nhau. Khi bạn học cách loại bỏ các kích thích bên ngoài và
-              đắm mình vào công việc, sở thích hoặc các mối quan hệ, bạn sẽ trải
-              nghiệm cảm giác thỏa mãn sâu sắc hơn và cảm thấy tốt hơn nhiều.
-              Bạn cũng sẽ trở nên năng suất hơn và đạt được nhiều mục tiêu cũng
-              như ước mơ của mình. Vì vậy, hãy ngừng để môi trường tác động đến
-              não bộ của bạn và thay vào đó, hãy kiểm soát lại nó. Đây là chìa
-              khóa cho một cuộc sống khỏe mạnh và hiệu quả. Waka xin trân trọng
-              giới thiệu Dopamine Detox - Thibaut Meurisse! Rút gọn Xem
+              {detailBook?.description}
             </p>
 
             <h1 className="mt-12 font-bold">

@@ -36,10 +36,10 @@ export default function page() {
   useEffect(
     () => async () => {
       const respones = await SgetAllCategoryBook();
-      setCategoryBook(respones.data);
+      setCategoryBook(respones?.data);
 
       const responesTypeBook = await SgetAllTypeBook();
-      setTypeBook(responesTypeBook.data);
+      setTypeBook(responesTypeBook?.data);
     },
     [isCheck]
   );
@@ -134,12 +134,12 @@ export default function page() {
                     <tr key={index} className="border ">
                       <td className="text-center">{index + 1}</td>
                       <td>{item?.typeBook?.nameType}</td>
-                      <td>{item.nameCategory}</td>
+                      <td>{item?.nameCategory}</td>
                       <td className="text-center">
                         <div className="flex space-x-4 items-center justify-center  m-4">
                           <button
                             onClick={() =>
-                              openModalEditCategory(item.id, item.nameCategory)
+                              openModalEditCategory(item?.id, item?.nameCategory)
                             }
                             className="bg-green-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded"
                           >
@@ -147,7 +147,7 @@ export default function page() {
                           </button>
 
                           <button
-                            onClick={() => handleDelete(item.id)}
+                            onClick={() => handleDelete(item?.id)}
                             className="bg-red-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded"
                           >
                             delete

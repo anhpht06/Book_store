@@ -9,6 +9,7 @@ export default function SideBarSetting() {
 
   return (
     <div className="bg-gray-100 m-3">
+      <title>Setting</title>
       <aside className="bg-gray-800 text-black w-64 min-h-screen p-4 rounded-lg">
         <nav>
           <div className="flex flex-col space-y-6">
@@ -31,7 +32,9 @@ export default function SideBarSetting() {
                 hover:bg-gray-700 hover:text-white
                 
              rounded-md px-3 py-2  ${
-               path === "add-category" ? " bg-green-500 text-white" : "bg-red-500 text-white"
+               path === "add-category"
+                 ? " bg-green-500 text-white"
+                 : "bg-red-500 text-white"
              }`}
             >
               Category book

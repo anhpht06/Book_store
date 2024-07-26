@@ -8,17 +8,19 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 import ModalBook from "@/components/layout/ModalBook";
-
+import ModalBookEdit from "@/components/layout/ModalBookEdit";
 export default function page() {
   const [isRefresh, setIsRefresh] = useState(false);
   const [books, setBooks] = useState([]);
   const [isOpenAdd, setIsOpenAdd] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
+  const [index, setIndex] = useState(NaN);
 
   useEffect(
     () => async () => {
       const respones = await SgetAllBook();
-      setBooks(respones.data);
+      setBooks(respones?.data);
+      console.log("test1:");
     },
     [isRefresh]
   );
@@ -26,15 +28,18 @@ export default function page() {
   function openAdd() {
     setIsOpenAdd(true);
   }
-  function openEdit(id) {
+  function openEdit(index) {
     setIsOpenEdit(true);
+    setIndex(index);
   }
   function closeSave() {
     setIsOpenAdd(false);
+    setIsOpenEdit(false);
     setIsRefresh(!isRefresh);
   }
   function close() {
     setIsOpenAdd(false);
+    setIsOpenEdit(false);
   }
   async function handleDelete(id) {
     if (confirm("Bạn có muốn xóa không?")) {
@@ -85,59 +90,59 @@ export default function page() {
                 </tr>
               </thead>
               <tbody className="text-left px-4 py-10">
-                {books
-                  ?.slice()
-                  .reverse()
-                  .map((item, index) => (
-                    <tr key={index} className="border ">
-                      <td className="text-center">{index + 1}</td>
-                      <td>{item?.typeBook?.nameType || "NaN"}</td>
-                      <td>{item?.catetoryBook?.nameCategory || "NaN"}</td>
-                      <td className="">
-                        <Image
-                          className="rounded-lg "
-                          src={item?.imageBook}
-                          alt="image"
-                          width={100}
-                          height={100}
-                        />
-                      </td>
-                      <td className="whitespace-normal">
-                        <h1>{item?.nameBook || "NaN"}</h1>
-                      </td>
-                      <td>{item?.auther?.name || "NaN"}</td>
-                      <td>{item?.detailBook?.price || "NaN"}</td>
-                      <td className="text-center">
-                        {item?.detailBook?.amount || "NaN"}
-                      </td>
+                {books.map((item, index) => (
+                  <tr key={index} className="border ">
+                    <td className="text-center">{index + 1}</td>
+                    <td>{item?.typeBook?.nameType || "NaN"}</td>
+                    <td>{item?.catetoryBook?.nameCategory || "NaN"}</td>
+                    <td className="">
+                      <Image
+                        className="rounded-lg "
+                        src={item?.imageBook}
+                        alt="image"
+                        width={100}
+                        height={100}
+                      />
+                    </td>
+                    <td className="whitespace-normal">
+                      <h1>{item?.nameBook || "NaN"}</h1>
+                    </td>
+                    <td>{item?.auther?.name || "NaN"}</td>
+                    <td>{item?.detailBook?.price || "NaN"}</td>
+                    <td className="text-center">
+                      {item?.detailBook?.amount || "NaN"}
+                    </td>
 
-                      <td className="text-center">
-                        <div className="flex space-x-4 items-center justify-center  m-4">
-                          <button
-                            // onClick={() =>
-                            //   handleDelete(item.id, item?.user?.email)
-                            // }
-                            className="bg-green-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded"
-                          >
-                            Edit
-                          </button>
+                    <td className="text-center">
+                      <div className="flex space-x-4 items-center justify-center  m-4">
+                        <button
+                          onClick={() => openEdit(index)}
+                          className="bg-green-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded"
+                        >
+                          Edit
+                        </button>
 
-                          <button
-                            onClick={() => handleDelete(item.id)}
-                            className="bg-red-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                        <h1></h1>
-                      </td>
-                    </tr>
-                  ))}
+                        <button
+                          onClick={() => handleDelete(item?.id)}
+                          className="bg-red-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                      <h1></h1>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
             {/* open dialog edit */}
-
-            {/* open dialog  add */}
+            <ModalBookEdit
+              isOpen={isOpenEdit}
+              onClose={close}
+              onCloseSave={closeSave}
+              book={books[index]}
+            />
+            ;{/* open dialog  add */}
           </div>
         </div>
       </div>

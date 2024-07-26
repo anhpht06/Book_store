@@ -28,6 +28,24 @@ export async function ScreateBook(formData) {
     return error;
   }
 }
+export async function SupdateBook(id, formData) {
+  console.log("tuasdfasdf", id);
+  try {
+    const response = await axios.put(
+      "http://localhost:3333/books/update/" + id,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+}
+
 export async function SgetBookByIdCate(id) {
   try {
     const respones = await axios.get(

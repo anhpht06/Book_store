@@ -89,8 +89,8 @@ export default function page() {
   }
   return (
     <div className="flex flex-row">
+      
       <SideBarSetting />
-
       <div className="m-3 rounded-lg text-white w-full bg-gray-800 ">
         <div className="m-6 flex flex-col divide-y divide-gray-500">
           <div className="flex flex-row">
