@@ -2,6 +2,7 @@ import UsersController from '#controllers/users_controller'
 import router from '@adonisjs/core/services/router'
 import BooksController from '#controllers/books_controller'
 import CartsController from '#controllers/carts_controller'
+import OrdersController from '#controllers/orders_controller'
 
 router
   .group(() => {
@@ -58,11 +59,25 @@ router
   })
   .prefix('/books')
 
-  router
-    .group(() => {
-      router.get("", [CartsController, 'getAllCart'])
-      router.get("/:id", [CartsController, 'getCartById'])
-      router.post("/create", [CartsController, 'createCart'])
-      router.put("/update/:id", [CartsController, 'updateCart'])
-      router.delete("/delete/:id", [CartsController, 'deleteCart'])
-    }).prefix('/cart')
+router
+  .group(() => {
+    router.get('', [CartsController, 'getAllCart'])
+    router.get('/:id', [CartsController, 'getCartByIdUser'])
+    router.post('/checkout/', [CartsController, 'getCartByIdCart'])
+    router.post('/create', [CartsController, 'createCart'])
+    router.put('/update', [CartsController, 'updateCart'])
+    router.delete('/delete/:id', [CartsController, 'deleteCart'])
+    router.post('/delete', [CartsController, 'deleteCartWhenOrder'])
+  })
+  .prefix('/cart')
+
+router
+  .group(() => {
+    router.get('/:id', [OrdersController, 'getOdersByUser'])
+    router.post('/create', [OrdersController, 'createOrder'])
+
+    // router.put('/update', [CartsController, 'updateOder'])
+    // router.delete('/delete/:id', [CartsController, 'deleteOder'])
+    // router.get('', [CartsController, 'getAllOder'])
+  })
+  .prefix('/order')

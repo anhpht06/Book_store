@@ -20,7 +20,6 @@ export default function page() {
     () => async () => {
       const respones = await SgetAllBook();
       setBooks(respones?.data);
-      console.log("test1:");
     },
     [isRefresh]
   );
@@ -31,6 +30,7 @@ export default function page() {
   function openEdit(index) {
     setIsOpenEdit(true);
     setIndex(index);
+    setIsRefresh(!isRefresh);
   }
   function closeSave() {
     setIsOpenAdd(false);
@@ -90,18 +90,19 @@ export default function page() {
                 </tr>
               </thead>
               <tbody className="text-left px-4 py-10">
-                {books.map((item, index) => (
+                {books?.map((item, index) => (
                   <tr key={index} className="border ">
                     <td className="text-center">{index + 1}</td>
                     <td>{item?.typeBook?.nameType || "NaN"}</td>
                     <td>{item?.catetoryBook?.nameCategory || "NaN"}</td>
                     <td className="">
                       <Image
-                        className="rounded-lg "
-                        src={item?.imageBook}
+                        className="rounded-lg w-auto h-auto"
+                        src={item?.imageBook || "/images/no-image.png"}
                         alt="image"
                         width={100}
                         height={100}
+                        priority={true}
                       />
                     </td>
                     <td className="whitespace-normal">
@@ -140,7 +141,8 @@ export default function page() {
               isOpen={isOpenEdit}
               onClose={close}
               onCloseSave={closeSave}
-              book={books[index]}
+              book={books?.[index]}
+              isRefresh={isRefresh}
             />
             ;{/* open dialog  add */}
           </div>

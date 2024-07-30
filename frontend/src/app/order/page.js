@@ -1,9 +1,9 @@
 import React from "react";
-import Register from "@/components/Register";
+import Order from "@/components/Order";
 export default function page() {
   return (
     <div>
-      <Register />
+      <Order />
     </div>
   );
 }

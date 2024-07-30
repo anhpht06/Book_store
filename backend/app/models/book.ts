@@ -1,11 +1,12 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column, hasOne, manyToMany } from '@adonisjs/lucid/orm'
 import DetailBook from './detail_book.js'
-import type { BelongsTo, HasMany, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
 import TypeBook from './type_book.js'
 import CategoryBook from './category_book.js'
 import Auther from './auther.js'
 import Cart from './cart.js'
+import Order from './order.js'
 export default class Book extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
@@ -45,8 +46,17 @@ export default class Book extends BaseModel {
   })
   declare auther: BelongsTo<typeof Auther>
 
-  @manyToMany(() => Cart, { pivotTable: 'create_cart_books' })
+  @manyToMany(() => Cart, {
+    pivotTable: 'create_cart_books',
+    pivotColumns: ['amount'],
+  })
   declare carts: ManyToMany<typeof Cart>
+
+  @manyToMany(() => Order, {
+    pivotTable: 'orders_books',
+    pivotColumns: ['amount'],
+  })
+  declare orders: ManyToMany<typeof Order>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

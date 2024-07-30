@@ -65,8 +65,6 @@ const ModalBook = ({ isOpen, onClose, onCloseSave, setData }) => {
     formData.append("category_id", idCategory);
     formData.append("auther_id", idAuther);
 
-    closeSave();
-
     const respones = await ScreateBook(formData);
 
     console.log("respones", respones);

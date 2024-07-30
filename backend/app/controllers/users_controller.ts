@@ -2,7 +2,7 @@ import ProfileUser from '#models/profile_user'
 import User from '#models/user'
 import { createUserValidators } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
-import { messages } from '@vinejs/vine/defaults'
+
 
 export default class UsersController {
   async register(ctx: HttpContext) {
@@ -28,7 +28,7 @@ export default class UsersController {
     }
   }
 
-  async logout(ctx: HttpContext) {
+  async logout() {
     return console.log({
       status: 'logout thanh cong',
     })

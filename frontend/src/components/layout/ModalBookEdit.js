@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book }) => {
+const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book, isRefresh }) => {
   const [loading, setLoading] = useState(false);
   const [types, setTypes] = useState([]);
   const [category, setCategory] = useState([]);
@@ -38,7 +38,17 @@ const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book }) => {
   }
   useEffect(() => {
     setImageUrl(null);
-  }, []);
+
+    setIdType(book?.typeBookId);
+    setIdCategory(book?.categoryId);
+    setIdAuther(book?.autherId);
+    setNameBook(book?.nameBook);
+    setImageUrl(book?.imageBook);
+    setPrice(book?.detailBook?.price);
+    setAmount(book?.detailBook?.amount);
+    setDescription(book?.detailBook?.description);
+    setPublisher(book?.detailBook?.publisher);
+  }, [isRefresh]);
 
   useEffect(() => {
     const getTypes = async () => {
@@ -46,7 +56,6 @@ const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book }) => {
       setTypes(types.data);
       const auther = await getAllauther();
       setAuther(auther?.data);
-
       const category = await ScategoryBook(idType);
       setCategory(category?.data);
     };
@@ -56,8 +65,9 @@ const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book }) => {
   async function handleEditBook() {
     setLoading(true);
     const formData = new FormData();
-    formData.append("image_book", image);
-
+    if (image) {
+      formData.append("image_book", image);
+    }
     formData.append("name_book", nameBook);
     formData.append("price", price);
     formData.append("amount", amount);
@@ -73,7 +83,7 @@ const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book }) => {
       if (respones?.status === "200") {
         closeSave();
       } else {
-        toast.error("Add fail");
+        toast.error("Edit fail");
       }
     } catch (error) {
     } finally {
@@ -92,7 +102,6 @@ const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book }) => {
 
   function closeSave() {
     onCloseSave();
-    
     setIdType(0);
     setIdCategory(0);
     setIdAuther(0);
@@ -149,7 +158,7 @@ const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book }) => {
                   ))}
                 </select>
                 <label className=" before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none  font-bold leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-gray-900 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                  {book?.typeBook?.nameType}
+                  Type book
                 </label>
               </div>
 
@@ -168,7 +177,7 @@ const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book }) => {
                 </select>
 
                 <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none  font-bold leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-gray-900 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                  {book?.catetoryBook?.nameCategory}
+                  Category book
                 </label>
               </div>
 
@@ -187,14 +196,14 @@ const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book }) => {
                 </select>
 
                 <label className="pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none  font-bold leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-gray-900 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                  {book?.auther?.name}
+                  Auther
                 </label>
               </div>
 
               <label className="border border-black px-2 py-2 rounded-lg">
                 <h1 className="  font-bold mb-3">Name book</h1>
                 <input
-                  value={nameBook}
+                  value={nameBook || ""}
                   onChange={(e) => setNameBook(e.target.value)}
                   placeholder={book?.nameBook}
                   className="border-none outline-none text-xl"
@@ -204,7 +213,7 @@ const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book }) => {
                 <h1 className="text-base font-bold mb-3">Description</h1>
                 <input
                   type="text"
-                  value={description}
+                  value={description || ""}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder={book?.detailBook?.description}
                   className="border-none outline-none text-xl"
@@ -223,24 +232,34 @@ const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book }) => {
                     className="border-none outline-none text-xl items-center"
                   ></input>
                 </div>
-                <div>
+                <div className="w-24 ">
                   {imageUrl ? (
                     <Image
-                      className=" rounded-lg "
-                      src={imageUrl}
+                      className=" rounded-lg"
+                      src={imageUrl || "/images/no-image.png"}
                       alt="Uploaded Image"
                       width={100}
                       height={100}
-                      priority
+                      style={{
+                        width: "auto",
+                        height: "auto",
+                        objectFit: "cover",
+                      }}
+                      priority={true}
                     />
                   ) : (
                     <Image
-                      className=" rounded-lg "
-                      src={book?.imageBook}
+                      className="rounded-lg"
+                      src={book?.imageBook || "/images/no-image.png"}
                       alt="Uploaded Image"
                       width={100}
                       height={100}
-                      priority
+                      style={{
+                        width: "auto",
+                        height: "auto",
+                        objectFit: "cover",
+                      }}
+                      priority={true}
                     />
                   )}
                 </div>
@@ -250,7 +269,7 @@ const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book }) => {
                 <h1 className="text-base font-bold mb-3">publisher</h1>
                 <input
                   type="text"
-                  value={publisher}
+                  value={publisher || ""}
                   onChange={(e) => setPublisher(e.target.value)}
                   placeholder={book?.detailBook?.publisher}
                   className="border-none outline-none text-xl"

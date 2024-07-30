@@ -10,6 +10,7 @@ import { compose } from '@adonisjs/core/helpers'
 import ProfileUser from './profile_user.js'
 import type { HasOne } from '@adonisjs/lucid/types/relations'
 import Cart from './cart.js'
+import Order from './order.js'
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
   passwordColumnName: 'password',
@@ -37,6 +38,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => Cart)
   declare carts: HasMany<typeof Cart>
+
+  @hasMany(() => Order)
+  declare typeBooks: HasMany<typeof Order>
 
   static accessTokens = JwtAccessTokenProvider.forModel(User, {
     expiresInMillis: parseDuration('1 day')!,

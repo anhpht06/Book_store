@@ -5,20 +5,19 @@ import Image from "next/image";
 
 export default function LayoutBook({ books }) {
   return (
-    <div className="grid  grid-cols-5 gap-4 gap-y-10">
+    <div className="grid grid-cols-6 gap-y-5">
       {books?.map((book) => (
         <ul className="rounded-lg" key={book.id}>
           <Link href={`/detail-book/${book.id}`}>
             <div className="ttransition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110  duration-300 ">
-              {book.imageBook && (
-                <Image
-                  className=" rounded-lg"
-                  src={book.imageBook}
-                  width="500" // Transform the image: auto-crop to square aspect_ratio
-                  height="500"
-                  alt={book.nameBook}
-                />
-              )}
+              <Image
+                className="rounded-lg"
+                src={book?.imageBook || "/images/no-image.png"}
+                width={200}
+                height={200}
+                alt={book.nameBook}
+                priority={true}
+              />
             </div>
             <div className="mt-2 font-bold">{book.nameBook}</div>
           </Link>

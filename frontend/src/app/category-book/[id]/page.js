@@ -3,9 +3,8 @@ import CcategoryBook from "@/components/categoryBook";
 export default function page({ params }) {
   return (
     <div>
-      <head>
-        <title>Category Book</title>
-      </head>
+      <title>Category Book</title>
+
       <CcategoryBook id={params.id} />
     </div>
   );

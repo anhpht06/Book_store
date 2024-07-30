@@ -1,9 +1,11 @@
 import React from "react";
-import Register from "@/components/Register";
+import Cart from "@/components/Cart";
 export default function page() {
+  
   return (
     <div>
-      <Register />
+      <title>Cart</title>
+      <Cart />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 
 import CategoryBook from './category_book.js'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
