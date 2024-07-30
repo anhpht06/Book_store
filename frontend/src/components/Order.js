@@ -10,6 +10,8 @@ export default function Order() {
 
   useEffect(
     () => async () => {
+
+      
       const response = await getOrderByUser(localStorage.getItem("idUser"));
       if (response?.status === "404") {
         setOrder([]);
