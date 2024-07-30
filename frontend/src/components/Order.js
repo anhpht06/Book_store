@@ -78,7 +78,7 @@ export default function Order() {
                       </td>
                       <div className="flex flex-row basis-full justify-end items-center mr-4 mb-4 ">
                         <h1 className=" text-sm mt-2">Order Total:</h1>
-                        <h1 className="text-lg font-bold text-red-500 ml-2 mt-2">
+                        <h1 className="text-lg font-bold text-red-500 ml-2 mt-2 ">
                           {items.total_price}$
                         </h1>
                       </div>
