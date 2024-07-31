@@ -1,9 +1,5 @@
-import { Inter } from "next/font/google";
 import "../app/globals.css";
 import Header from "../components/header";
-
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
   return (
@@ -16,7 +12,7 @@ export default function RootLayout({ children }) {
           href="https://cdn-icons-png.flaticon.com/512/4212/4212474.png"
         />
       </head>
-      <body className={inter.className} suppressHydrationWarning={true}>
+      <body suppressHydrationWarning={true}>
         <Header />
         {children}
         {/* <Footer /> */}

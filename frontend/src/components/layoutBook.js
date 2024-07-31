@@ -17,6 +17,7 @@ export default function LayoutBook({ books }) {
                 height={200}
                 alt={book.nameBook}
                 priority={true}
+                style={{ width: "auto", height: "auto" }}
               />
             </div>
             <div className="mt-2 font-bold">{book.nameBook}</div>
