@@ -26,12 +26,11 @@ export async function SUpdateProfile(id, data) {
       data
     );
 
-    if (response.status === 200) {
+    if (response.status === "200") {
       return response.data;
     } else {
       return {
-        status: "404",
-        message: "update fail",
+        data: response.data,
       };
     }
   } catch (error) {

@@ -1,6 +1,7 @@
 import { HttpContext } from '@adonisjs/core/http'
 import Order from '#models/order'
 import Cart from '#models/cart'
+import { create } from 'lodash'
 
 export default class OdersController {
   async createOrder(ctx: HttpContext) {
@@ -65,6 +66,8 @@ export default class OdersController {
         user_id: order.user_id,
         total_quantity: order.total_quantity,
         total_price: order.total_price,
+        created_at: order.createdAt,
+
         books: order.books.map((book: any) => ({
           id: book.id,
           amount: book.$extras.pivot_amount,

@@ -3,28 +3,31 @@ import React from "react";
 import Sprofile, { SUpdateProfile } from "@/services/auth/profile";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function Profile({ id }) {
   const [profile, setProfile] = useState([]);
-  const [isUpdate, setIsUpdate] = useState([]);
+  const [isUpdate, setIsUpdate] = useState(false);
 
   const [userName, setUserName] = useState("");
   const [phone, setPhone] = useState("");
   const [age, setAge] = useState("");
   const [gender, setgender] = useState("");
   const [address, setaddress] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(
     () => async () => {
       const response = await Sprofile(id);
       setProfile(response.data);
-
       setUserName(response.data.userName);
       setPhone(response.data.phone);
       setAge(response.data.age);
       setgender(response.data.gender);
       setaddress(response.data.address);
     },
-    []
+    [isUpdate]
   );
 
   async function handleUpdateProfile() {
@@ -35,12 +38,19 @@ export default function Profile({ id }) {
       gender: gender,
       address: address,
     };
+    // toast.success("Update success");
+
     const response = await SUpdateProfile(id, data);
-    if (response) {
+    console.log(response.data);
+    if (response.data.status === "200") {
+      console.log("thanh cong");
       setProfile(response.data);
-      setIsUpdate(response.data);
-    } else {
-      console.log("Khong thanh cong ");
+      setIsUpdate(!isUpdate);
+      toast.success(response.message);
+      setError("");
+    } else if (response.data.status === "404") {
+      console.log("that bai");
+      setError("Số điện thoại đã được đăng ký!");
     }
   }
   async function handleCancelUpdateProfile(event) {
@@ -71,7 +81,7 @@ export default function Profile({ id }) {
         </div>
 
         <div>
-          <div class="flex flex-col  ml-6 ">
+          <div className="flex flex-col  ml-6 ">
             <h1 className="text-xl font-bold">Quản lý thông tin</h1>
             <h1 className=" text-sm font-bold mt-2">Thông tin cá nhân</h1>
             <div className="flex flex-col divide-y divide-gray-500 ">
@@ -89,7 +99,7 @@ export default function Profile({ id }) {
                     <input
                       type="text"
                       id="name"
-                      value={userName}
+                      value={userName || ""}
                       onChange={(e) => setUserName(e.target.value)}
                     />
                   </div>
@@ -100,9 +110,10 @@ export default function Profile({ id }) {
                     <input
                       type="text"
                       id="phone"
-                      value={phone}
+                      value={phone || ""}
                       onChange={(e) => setPhone(e.target.value)}
                     />
+                    <h1 className="text-red-500 text-sm">{error}</h1>
                   </div>
 
                   <div className="flex flex-col border-2 border-black rounded-lg  p-1.5 mt-2">
@@ -111,7 +122,7 @@ export default function Profile({ id }) {
                     <input
                       type="text"
                       id="age"
-                      value={age}
+                      value={age || ""}
                       onChange={(e) => setAge(e.target.value)}
                     />
                   </div>
@@ -122,7 +133,7 @@ export default function Profile({ id }) {
                     <input
                       type="text"
                       id="gender"
-                      value={gender}
+                      value={gender || ""}
                       onChange={(e) => setgender(e.target.value)}
                     />
                   </div>
@@ -133,14 +144,15 @@ export default function Profile({ id }) {
                     <input
                       type="text"
                       id="address"
-                      value={address}
+                      value={address || ""}
                       onChange={(e) => setaddress(e.target.value)}
                     />
                   </div>
 
                   <div className="flex flex-row">
                     <button
-                      onClick={handleUpdateProfile}
+                      type="button"
+                      onClick={() => handleUpdateProfile()}
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2"
                     >
                       Update
@@ -158,6 +170,7 @@ export default function Profile({ id }) {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
