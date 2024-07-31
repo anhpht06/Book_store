@@ -1,7 +1,6 @@
 import { HttpContext } from '@adonisjs/core/http'
 import Order from '#models/order'
 import Cart from '#models/cart'
-import { create } from 'lodash'
 
 export default class OdersController {
   async createOrder(ctx: HttpContext) {
