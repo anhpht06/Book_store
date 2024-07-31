@@ -3,7 +3,6 @@ import User from '#models/user'
 import { createUserValidators } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
 
-
 export default class UsersController {
   async register(ctx: HttpContext) {
     const userdata = await createUserValidators.validate(ctx.request.body())
@@ -45,10 +44,30 @@ export default class UsersController {
   }
 
   async updateProfieUser(ctx: HttpContext) {
-    const profileUser = await ProfileUser.findOrFail(ctx.params.id)
-    profileUser.merge(ctx.request.body())
-    await profileUser.save()
-    return ctx.response.ok(profileUser)
+    const profileUser = await ProfileUser.findBy('id', ctx.params.id)
+
+    console.log(profileUser)
+    if (profileUser) {
+      try {
+        profileUser?.merge(ctx.request.body())
+        await profileUser?.save()
+        return ctx.response.ok({
+          status: '200',
+          messages: 'update success',
+          data: profileUser,
+        })
+      } catch (error) {
+        return ctx.response.json({
+          status: '404',
+          messages: 'Số điện thoại đã được đăng ký.',
+        })
+      }
+    } else {
+      return ctx.response.json({
+        status: '404',
+        messages: 'user not found',
+      })
+    }
   }
 
   async getAllUser(ctx: HttpContext) {

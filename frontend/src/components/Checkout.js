@@ -53,7 +53,7 @@ export default function checkout({ data }) {
       profile.phone == null ||
       profile.address == null
     ) {
-      alert("Please fill in your information");
+      toast.error("Please update your information");
       setIsLoading(false);
     } else {
       if (confirm("Do you want to Place Order?")) {
@@ -81,7 +81,7 @@ export default function checkout({ data }) {
           const res = await deleteCartWhenCheckout(data);
           if (res.status === "200") {
             toast.success("Place order success");
-            window.location.href = "/";
+            window.location.href = "/order";
           }
         }
       } else {

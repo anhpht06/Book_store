@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import Slogin from "@/services/auth/login";
+import Link from "next/link";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -83,7 +84,7 @@ export default function Login() {
               <input
                 autoComplete="current-password"
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type={"password"}
+                type={showPassword ? "text" : "password"}
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -117,6 +118,13 @@ export default function Login() {
             >
               {loading ? "Loading..." : "Sign In"}
             </button>
+            <Link
+              href="/register"
+              className="bg-blue-600  text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110 hover:bg-indigo-700 duration-300 hover:text-red-500"
+              disabled={loading}
+            >
+              {loading ? "Loading..." : "Register"}
+            </Link>
           </div>
         </form>
       </div>
