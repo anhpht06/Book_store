@@ -9,7 +9,6 @@ import cloudinary from '#config/cloud'
 export default class BooksController {
   //Type book
   async getTypeBookById(ctx: HttpContext) {
-    
     const typeBook = await TypeBook.findOrFail(ctx.params.id)
     if (Object.keys(typeBook).length === 0) {
       return ctx.response.notFound({ messages: 'not found' })
