@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: postgresql
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=book_store
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=061200
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3333:3333"
+    environment:
+      - NODE_ENV=production
+      - PORT=3333
+      - HOST=0.0.0.0
+      - LOG_LEVEL=info
+      - APP_KEY=zg8xiK1zXXZla7W9bo2VqSG_ua0iBG5T
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=061200
+      - DB_DATABASE=book_store
+    depends_on:
+      - postgres
+    command: sh -c "node ace migration:run --force && node bin/server.js"
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  postgres-data:

@@ -1,11 +1,9 @@
 import axios from "axios";
 import React from "react";
-
+import { API_CATEGORYBOOK } from "../API";
 export default async function ScategoryBook(id) {
   try {
-    const response = await axios.get(
-      "http://localhost:3333/category-book/" + id
-    );
+    const response = await axios.get(API_CATEGORYBOOK() + "/" + id);
 
     return response.data;
   } catch (error) {
@@ -15,7 +13,7 @@ export default async function ScategoryBook(id) {
 
 export async function SgetAllCategoryBook() {
   try {
-    const response = await axios.get("http://localhost:3333/category-book");
+    const response = await axios.get(API_CATEGORYBOOK());
     return response.data;
   } catch (error) {
     return error;
@@ -24,9 +22,7 @@ export async function SgetAllCategoryBook() {
 
 export async function SdeleteCategoryBook(id) {
   try {
-    const response = await axios.delete(
-      "http://localhost:3333/category-book/delete/" + id
-    );
+    const response = await axios.delete(API_CATEGORYBOOK() + "/delete/" + id);
     return response.data;
   } catch (error) {
     return error;
@@ -35,7 +31,7 @@ export async function SdeleteCategoryBook(id) {
 export async function SupdateTypeBook(id, data) {
   try {
     const response = await axios.put(
-      "http://localhost:3333/category-book/update/" + id,
+      API_CATEGORYBOOK() + "/update/" + id,
       data
     );
     return response.data;
@@ -45,10 +41,9 @@ export async function SupdateTypeBook(id, data) {
 }
 export async function ScreateCategoryBook(data) {
   try {
-    const response = await axios.post(
-      "http://localhost:3333/category-book/create",
-      data
-    );
+    console.log(API_CATEGORYBOOK() + "/create", data);
+    const response = await axios.post(API_CATEGORYBOOK() + "/create", data);
+
     return response.data;
   } catch (error) {
     return error;

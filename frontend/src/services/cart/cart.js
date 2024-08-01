@@ -1,8 +1,9 @@
 import React from "react";
 import axios from "axios";
+import { API_CART } from "../API";
 import { EXPORT_DETAIL } from "next/dist/shared/lib/constants";
 export default async function cart() {
-  const respones = await axios.get("http://localhost:3333/cart");
+  const respones = await axios.get(API_CART());
   if (respones.data.status === "200") {
     return respones.data.data;
   } else if (respones.data.status === "404") {
@@ -11,8 +12,8 @@ export default async function cart() {
 }
 export async function createCart(data) {
   try {
-    const respones = await axios.post(
-      "http://localhost:3333/cart/create",
+    const respones = await axios.post(API_CART()+
+      "/create",
       data
     );
 
@@ -26,7 +27,7 @@ export async function createCart(data) {
   }
 }
 export async function getCartByIdUser(id) {
-  const respones = await axios.get("http://localhost:3333/cart/" + id);
+  const respones = await axios.get(API_CART()+"/" + id);
   if (respones.data.status === "200") {
     return respones.data.data;
   } else if (respones.data.status === "404") {
@@ -34,8 +35,8 @@ export async function getCartByIdUser(id) {
   }
 }
 export async function getCartByIdCart(data) {
-  const respones = await axios.post(
-    "http://localhost:3333/cart/checkout/",
+  const respones = await axios.post(API_CART()+
+    "/checkout/",
     data
   );
   if (respones.data.status === "200") {
@@ -46,8 +47,8 @@ export async function getCartByIdCart(data) {
 }
 
 export async function deleteCart(id) {
-  const respones = await axios.delete(
-    "http://localhost:3333/cart/delete/" + id
+  const respones = await axios.delete(API_CART()+
+    "/delete/" + id
   );
   if (respones.data.status === "200") {
     return respones.data.data;
@@ -56,8 +57,8 @@ export async function deleteCart(id) {
   }
 }
 export async function deleteCartWhenCheckout(data) {
-  const respones = await axios.post(
-    "http://localhost:3333/cart/delete",
+  const respones = await axios.post(API_CART()+
+    "/delete",
     data
   );
   if (respones.data.status === "200") {
@@ -67,7 +68,7 @@ export async function deleteCartWhenCheckout(data) {
   }
 }
 export async function updateCart(data) {
-  const respones = await axios.put("http://localhost:3333/cart/update", data);
+  const respones = await axios.put(API_CART()+"/update", data);
   if (respones.status === 200) {
     return respones.data;
   }

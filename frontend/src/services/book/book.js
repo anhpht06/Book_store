@@ -1,9 +1,10 @@
 "use client";
 import React from "react";
 import axios from "axios";
+import { API_BOOKS } from "../API";
 export default async function Sbook() {
   try {
-    const response = await axios.get("http://localhost:3333/books/");
+    const response = await axios.get(API_BOOKS());
 
     return response.data;
   } catch (error) {
@@ -13,8 +14,8 @@ export default async function Sbook() {
 
 export async function ScreateBook(formData) {
   try {
-    const response = await axios.post(
-      "http://localhost:3333/books/create",
+    const response = await axios.post(API_BOOKS()+
+      "/create",
       formData,
       {
         headers: {
@@ -31,8 +32,8 @@ export async function ScreateBook(formData) {
 export async function SupdateBook(id, formData) {
   console.log("tuasdfasdf", id);
   try {
-    const response = await axios.put(
-      "http://localhost:3333/books/update/" + id,
+    const response = await axios.put(API_BOOKS()+
+      "/update/" + id,
       formData,
       {
         headers: {
@@ -48,8 +49,8 @@ export async function SupdateBook(id, formData) {
 
 export async function SgetBookByIdCate(id) {
   try {
-    const respones = await axios.get(
-      "http://localhost:3333/books/category/" + id
+    const respones = await axios.get(API_BOOKS()+
+      "/category/" + id
     );
 
     return respones.data;
@@ -58,7 +59,7 @@ export async function SgetBookByIdCate(id) {
 
 export async function SgetBookById(id) {
   try {
-    const respones = await axios.get("http://localhost:3333/books/" + id);
+    const respones = await axios.get(API_BOOKS()+"/" + id);
     if (respones.status === 200) {
       return respones.data;
     } else if (respones.status === 404) {
@@ -70,8 +71,8 @@ export async function SgetBookById(id) {
 }
 export async function SgetDetailBook(id) {
   try {
-    const respones = await axios.get(
-      "http://localhost:3333/books/detail-book/" + id
+    const respones = await axios.get(API_BOOKS()+
+      "/detail-book/" + id
     );
     console.log(id);
     if (respones.status === 200) {
@@ -86,7 +87,7 @@ export async function SgetDetailBook(id) {
 
 export async function SgetAllBook() {
   try {
-    const response = await axios.get("http://localhost:3333/books/");
+    const response = await axios.get(API_BOOKS());
     if (response.status === 200) {
       return response.data;
     } else if (response.status === 404) {
@@ -98,8 +99,8 @@ export async function SgetAllBook() {
 }
 export async function SdeleteBook(id) {
   try {
-    const response = await axios.delete(
-      "http://localhost:3333/books/delete/" + id
+    const response = await axios.delete(API_BOOKS()+
+      "/delete/" + id
     );
 
     console.log(response);

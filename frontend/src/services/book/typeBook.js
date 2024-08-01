@@ -1,10 +1,10 @@
 import React from "react";
 import axios from "axios";
-import { FaAws } from "react-icons/fa";
+import { API_TYPEBOOK } from "../API";
 
 export default async function StypeBook() {
   try {
-    const response = await axios.get("http://localhost:3333/type-book");
+    const response = await axios.get(API_TYPEBOOK());
     return response.data;
   } catch (error) {
     return error;
@@ -13,7 +13,7 @@ export default async function StypeBook() {
 
 export async function SgetTypeBookById(id) {
   try {
-    const response = await axios.get("http://localhost:3333/type-book/" + id);
+    const response = await axios.get(API_TYPEBOOK()+"/" + id);
 
     return response.data;
   } catch (error) {
@@ -23,8 +23,8 @@ export async function SgetTypeBookById(id) {
 
 export async function SdeleteTypeBook(id) {
   try {
-    const response = await axios.delete(
-      "http://localhost:3333/type-book/delete/" + id
+    const response = await axios.delete(API_TYPEBOOK()+
+      "/delete/" + id
     );
 
     return response.data;
@@ -34,8 +34,8 @@ export async function SdeleteTypeBook(id) {
 }
 export async function SupdateTypeBook(id, data) {
   try {
-    const response = await axios.put(
-      "http://localhost:3333/type-book/update/" + id,
+    const response = await axios.put(API_TYPEBOOK()+
+      "/update/" + id,
       data
     );
 
@@ -46,8 +46,8 @@ export async function SupdateTypeBook(id, data) {
 }
 export async function ScreateTypeBook(data) {
   try {
-    const response = await axios.post(
-      "http://localhost:3333/type-book/create",
+    const response = await axios.post(API_TYPEBOOK()+
+      "/create",
       data
     );
     console.log(response.data);
@@ -60,7 +60,7 @@ export async function ScreateTypeBook(data) {
 }
 export async function SgetAllTypeBook() {
   try {
-    const response = await axios.get("http://localhost:3333/type-book");
+    const response = await axios.get(API_TYPEBOOK());
     return response.data;
   } catch (error) {
     return error;

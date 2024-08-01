@@ -1,9 +1,10 @@
 import React from "react";
 import axios from "axios";
+import { API_USER } from "../API";
 export default function register() {}
 export async function Sregister(data) {
-  const respones = await axios.post(
-    "http://localhost:3333/user/register",
+  const respones = await axios.post(API_USER() +
+    "/register",
     data
   );
   if (respones) {

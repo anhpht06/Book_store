@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.integer('cart_id').unsigned().references('carts.id').onDelete('CASCADE')
       table.integer('book_id').unsigned().references('books.id').onDelete('CASCADE')
       table.integer('amount').notNullable()
-      table.unique(['user_id', 'book_id'])
+      table.unique(['cart_id', 'book_id'])
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

@@ -1,27 +1,20 @@
 import React from "react";
 import axios from "axios";
+import { API_AUTHER } from "../API";
 export default async function getAllauther() {
-  const respones = await axios.get("http://localhost:3333/auther");
+  const respones = await axios.get(API_AUTHER());
   return respones.data;
 }
 
 export async function ScreateAuther(data) {
-  const respones = await axios.post(
-    "http://localhost:3333/auther/create",
-    data
-  );
+  const respones = await axios.post(API_AUTHER() + "/create", data);
   return respones.data;
 }
 export async function SdeleteAuther(id) {
-  const respones = await axios.delete(
-    "http://localhost:3333/auther/delete/" + id
-  );
+  const respones = await axios.delete(API_AUTHER() + "/delete/" + id);
   return respones.data;
 }
 export async function SupdateAuther(id, data) {
-  const respones = await axios.put(
-    "http://localhost:3333/auther/update/" + id,
-    data
-  );
+  const respones = await axios.put(API_AUTHER() + "/update/" + id, data);
   return respones.data;
 }

@@ -1,11 +1,11 @@
 import React from "react";
 import axios from "axios";
+import { API_USER } from "../API";
 export default async function Sprofile(id) {
+  console.log(API_USER() + "/profile-user/" + id);
   try {
-    const response = await axios.get(
-      "http://localhost:3333/user/profile-user/" + id
-    );
-
+    const response = await axios.get(API_USER() + "/profile-user/" + id);
+    console.log(response);
     if (response.status === 200) {
       return response.data;
     } else {
@@ -21,10 +21,7 @@ export default async function Sprofile(id) {
 
 export async function SUpdateProfile(id, data) {
   try {
-    const response = await axios.put(
-      "http://localhost:3333/user/profile-user/" + id,
-      data
-    );
+    const response = await axios.put(API_USER() + "/profile-user/" + id, data);
 
     if (response.status === "200") {
       return response.data;
@@ -39,7 +36,7 @@ export async function SUpdateProfile(id, data) {
 }
 export async function SgetAllProfile() {
   try {
-    const response = await axios.get("http://localhost:3333/user");
+    const response = await axios.get(API_USER());
     if (response.status === 200) {
       return response.data;
     } else {
@@ -54,9 +51,7 @@ export async function SgetAllProfile() {
 }
 export async function SdeleteUser(id) {
   try {
-    const response = await axios.delete(
-      "http://localhost:3333/user/delete/" + id
-    );
+    const response = await axios.delete(API_USER() + "/delete/" + id);
     if (response.status === 200) {
       return response.data;
     } else {

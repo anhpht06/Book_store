@@ -20,6 +20,7 @@ export default function Profile({ id }) {
   useEffect(
     () => async () => {
       const response = await Sprofile(id);
+      
       setProfile(response.data);
       setUserName(response.data.userName);
       setPhone(response.data.phone);
