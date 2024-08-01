@@ -14,8 +14,8 @@ export default function Header() {
   const [amoutItemCart, setAmoutItemCart] = useState(0);
   const [amountItemOder, setAmountItemOder] = useState(0);
 
-  useEffect(
-    () => async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       try {
         const respones = await getCartByIdUser(localStorage.getItem("idUser"));
         console.log(respones);
@@ -34,9 +34,9 @@ export default function Header() {
       } catch (error) {
         console.log(error);
       }
-    },
-    []
-  );
+    };
+    fetchData();
+  }, []);
 
   function handleLogout() {
     if (confirm("Do you want to logout?")) {
@@ -53,13 +53,13 @@ export default function Header() {
   const [isLogin, setIsLogin] = useState(false);
   const [role, setRole] = useState(false);
 
-  useEffect(
-    () => async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       const response = await StypeBook();
       setTypeBook(response.data);
-    },
-    []
-  );
+    };
+    fetchData();
+  }, []);
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -67,7 +67,6 @@ export default function Header() {
     } else {
       setIsLogin(false);
     }
-
     const role = localStorage.getItem("role");
     if (role === "admin") {
       setRole(true);
@@ -76,7 +75,6 @@ export default function Header() {
     }
   }, [isLogin, role]);
 
-  useEffect(() => {}, []);
   return (
     <main>
       <nav className="bg-gray-800  ">

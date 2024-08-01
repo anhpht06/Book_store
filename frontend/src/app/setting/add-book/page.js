@@ -16,13 +16,14 @@ export default function page() {
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [index, setIndex] = useState(NaN);
 
-  useEffect(
-    () => async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       const respones = await SgetAllBook();
       setBooks(respones?.data);
-    },
-    [isRefresh]
-  );
+    };
+
+    fetchData();
+  }, [isRefresh]);
 
   function openAdd() {
     setIsOpenAdd(true);
@@ -109,9 +110,9 @@ export default function page() {
                       <h1>{item?.nameBook || "NaN"}</h1>
                     </td>
                     <td>{item?.auther?.name || "NaN"}</td>
-                    <td>{item?.detailBook?.price || "NaN"}</td>
+                    <td>{item?.detailBook?.price || "0"}</td>
                     <td className="text-center">
-                      {item?.detailBook?.amount || "NaN"}
+                      {item?.detailBook?.amount || "0"}
                     </td>
 
                     <td className="text-center">

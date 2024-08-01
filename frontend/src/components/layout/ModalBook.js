@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const ModalBook = ({ isOpen, onClose, onCloseSave, setData }) => {
+const ModalBook = ({ isOpen, onClose, onCloseSave }) => {
   const [loading, setLoading] = useState(false);
   const [types, setTypes] = useState([]);
   const [category, setCategory] = useState([]);
@@ -39,16 +39,15 @@ const ModalBook = ({ isOpen, onClose, onCloseSave, setData }) => {
     setImageUrl(null);
   }, []);
   useEffect(() => {
-    const getTypes = async () => {
+    const fetchData = async () => {
       const types = await StypeBook();
       setTypes(types.data);
       const auther = await getAllauther();
       setAuther(auther?.data);
-
       const category = await ScategoryBook(idType);
       setCategory(category?.data);
     };
-    getTypes();
+    fetchData();
   }, [idType]);
 
   async function handleAddBook() {

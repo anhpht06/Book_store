@@ -1,29 +1,32 @@
 import React from "react";
-const HTTP = "http://localhost:3333/";
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+const HTTP = apiBaseUrl;
+console.log("http api:::", HTTP);
+
+
 export default function API() {}
 export function API_USER() {
-    
-  return HTTP + "user";
+  return HTTP + "/user";
 }
 export function API_AUTHER() {
-  return HTTP + "auther";
+  return HTTP + "/auther";
 }
 
 export function API_BOOKS() {
-  return HTTP + "books";
+  return HTTP + "/books";
 }
 
 export function API_TYPEBOOK() {
-  return HTTP + "type-book";
+  return HTTP + "/type-book";
 }
 
 export function API_CATEGORYBOOK() {
-  return HTTP + "category-book";
+  return HTTP + "/category-book";
 }
-export function API_CART (){
-  return HTTP + "cart";
+export function API_CART() {
+  return HTTP + "/cart";
 }
 
 export function API_ORDER() {
-  return HTTP + "order";
+  return HTTP + "/order";
 }

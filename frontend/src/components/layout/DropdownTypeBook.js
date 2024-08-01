@@ -6,8 +6,8 @@ export default function DropdownTypeBook({ typeBook, setIdTypeBook }) {
   const [nameType, setnameType] = useState("");
 
   useEffect(() => {
-    setnameType(typeBook[0].nameType);
-    setIdTypeBook(typeBook[0].id);
+    setnameType(typeBook[0]?.nameType);
+    setIdTypeBook(typeBook[0]?.id);
   }, [typeBook]);
   function handleClick() {
     setIsOpen(!isOpen);
@@ -38,13 +38,13 @@ export default function DropdownTypeBook({ typeBook, setIdTypeBook }) {
                 <button
                   onClick={() => {
                     setIdTypeBook(item.id);
-                    setnameType(item.nameType), setIsOpen(!isOpen);
+                    setnameType(item?.nameType), setIsOpen(!isOpen);
                   }}
                   key={item.id}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full"
                   role="menuitem"
                 >
-                  {item.nameType}
+                  {item?.nameType}
                 </button>
               ))}
             </div>
@@ -54,5 +54,3 @@ export default function DropdownTypeBook({ typeBook, setIdTypeBook }) {
     </div>
   );
 }
-
-export function getTypeBook(idType, nameType) {}

@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { API_AUTHER } from "../API";
 export default async function getAllauther() {
+  console.log("HTTP: test: " + API_AUTHER());
   const respones = await axios.get(API_AUTHER());
   return respones.data;
 }

@@ -3,6 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Sprofile from "@/services/auth/profile";
 import cart, { deleteCartWhenCheckout } from "@/services/cart/cart";
+import { SupdateQuantity } from "@/services/book/book";
 import { createOrder } from "@/services/order/order";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
@@ -16,17 +17,19 @@ export default function checkout({ data }) {
 
   const [cart_ids, setCart_ids] = useState([]);
   const [isRefresh, setIsRefresh] = useState(false);
-  useEffect(
-    () => async () => {
-      const response = await Sprofile(localStorage.getItem("idUser"));
-      setProfile(response?.data);
-    },
-    [isRefresh]
-  );
+
+  const [book_ids, setBook_ids] = useState([]);
+  const [amounts, setAmounts] = useState([]);
 
   useEffect(() => {
-    // setCarts([...data]);
+    const fetchData = async () => {
+      const response = await Sprofile(localStorage.getItem("idUser"));
+      setProfile(response?.data);
+    };
+    fetchData();
+  }, [isRefresh]);
 
+  useEffect(() => {
     if (Array.isArray(data) && data.length > 0) {
       setCarts(data);
       setAmoutItem(Object.keys(data).length);
@@ -34,16 +37,23 @@ export default function checkout({ data }) {
 
     let newSubtotal = subtotal;
     let cart_ids = [];
+    let book_ids = [];
+    let amounts = [];
 
     if (Array.isArray(data) && data.length > 0) {
       data?.forEach((item) => {
-        newSubtotal += item.books[0].detailBook.price * item.amount;
-        cart_ids.push(item.id);
+        newSubtotal += item?.books[0].detailBook.price * item.amount;
+        cart_ids.push(item?.id);
+        book_ids.push(item?.bookId);
+        amounts.push(item?.amount);
       });
     }
 
     setCart_ids(cart_ids);
     setSubtotal(newSubtotal);
+
+    setBook_ids(book_ids);
+    setAmounts(amounts);
   }, [data, isRefresh]);
 
   async function handleCheckout() {
@@ -75,6 +85,18 @@ export default function checkout({ data }) {
         console.log("Order: ", response);
 
         if (response.status === "200") {
+          //update quantity
+          const quantitys = {
+            id: book_ids,
+            amount: amounts,
+          };
+
+          const res1 = await SupdateQuantity(quantitys);
+          if (res1.status === "200") {
+            toast.success("Place order success");
+            window.location.href = "/order";
+          }
+          //delete cart when order success
           const data = {
             cart_ids: cart_ids,
           };
@@ -136,33 +158,35 @@ export default function checkout({ data }) {
           <tbody>
             {carts &&
               carts?.map((items, index) => (
-                <tr key={items.id}>
+                <tr key={items?.id}>
                   <td>
                     <div className="flex gap-4  py-2">
                       <div className="base-1/2">
                         <Image
                           className="rounded-lg"
-                          src={items.books[0].imageBook}
+                          src={items?.books[0].imageBook}
                           height={40}
                           width={40}
                           priority={true}
                           style={{ width: "auto", height: "auto" }}
-                          alt={items.books[0].nameBook}
+                          alt={items?.books[0].nameBook}
                         />
                       </div>
                       <div className=" basis-1/2 flex flex-col">
-                        <h1 className="font-bold">{items.books[0].nameBook}</h1>
-                        <h1>{items.books[0].auther.name}</h1>
+                        <h1 className="font-bold">
+                          {items?.books[0].nameBook}
+                        </h1>
+                        <h1>{items?.books[0].auther.name}</h1>
                       </div>
                     </div>
                   </td>
                   <td className="text-center">
-                    {items.books[0].detailBook.price}$
+                    {items?.books[0].detailBook.price}$
                   </td>
-                  <td className="text-center">{items.amount}</td>
+                  <td className="text-center">{items?.amount}</td>
 
                   <td className="text-center text-red-500 font-bold ">
-                    {items.books[0].detailBook.price * items.amount}$
+                    {items?.books[0].detailBook.price * items?.amount}$
                   </td>
                 </tr>
               ))}

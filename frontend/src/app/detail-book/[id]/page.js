@@ -8,19 +8,19 @@ export default function page({ params }) {
   const [book, setBook] = useState([]);
   const [notFound, setNotFound] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  useEffect(
-    () => async () => {
-      const respones = await SgetBookById(params.id);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const respones = await SgetBookById(params.id);
       if (respones?.status === "200") {
         setBook(respones?.data);
       } else if (respones?.status === "404") {
         setNotFound(true);
       }
       setIsClient(true);
-    },
-    []
-  );
+    };
+    fetchData();
+  }, []);
   return (
     <>
       {isClient ? (

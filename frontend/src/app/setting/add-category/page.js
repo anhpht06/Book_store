@@ -33,16 +33,17 @@ export default function page() {
       toast.error(messages);
     }
   }
-  useEffect(
-    () => async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       const respones = await SgetAllCategoryBook();
       setCategoryBook(respones?.data);
 
       const responesTypeBook = await SgetAllTypeBook();
       setTypeBook(responesTypeBook?.data);
-    },
-    [isCheck]
-  );
+    };
+
+    fetchData();
+  }, [isCheck]);
 
   function openModalAddCategory() {
     setIsOpenModalAdd(true);
@@ -133,13 +134,16 @@ export default function page() {
                   .map((item, index) => (
                     <tr key={index} className="border ">
                       <td className="text-center">{index + 1}</td>
-                      <td>{item?.typeBook?.nameType}</td>
+                      <td>{item && item?.typeBook?.nameType}</td>
                       <td>{item?.nameCategory}</td>
                       <td className="text-center">
                         <div className="flex space-x-4 items-center justify-center  m-4">
                           <button
                             onClick={() =>
-                              openModalEditCategory(item?.id, item?.nameCategory)
+                              openModalEditCategory(
+                                item?.id,
+                                item?.nameCategory
+                              )
                             }
                             className="bg-green-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded"
                           >

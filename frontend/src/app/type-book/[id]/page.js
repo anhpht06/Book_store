@@ -5,9 +5,8 @@ import CtypeBook from "@/components/typeBook";
 export default function page({ params }) {
   return (
     <div>
-      <head>
-        <title>Type Book</title>
-      </head>
+      <title>Type Book</title>
+
       <CtypeBook id={params.id} />
     </div>
   );

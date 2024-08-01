@@ -3,9 +3,7 @@ import Book from "@/components/book";
 export default function Home() {
   return (
     <div>
-      <header>
-        <title>Book Store</title>
-      </header>
+      <title>Book Store</title>
       <Book />
     </div>
   );

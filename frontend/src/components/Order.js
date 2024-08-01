@@ -14,13 +14,16 @@ export default function Order() {
     }
   }, []);
   useEffect(
-    () => async () => {
+    () =>  {
+      const fetchData = async () => {
       const response = await getOrderByUser(localStorage.getItem("idUser"));
       if (response?.status === "404") {
         setOrder([]);
       } else {
         setOrder(response);
       }
+    };
+    fetchData();
     },
     []
   );

@@ -28,13 +28,13 @@ export default function page() {
     }
   }
 
-  useEffect(
-    () => async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       const respones = await StypeBook();
       setTypeBook(respones.data);
-    },
-    [isCheckRefresh]
-  );
+    };
+    fetchData();
+  }, [isCheckRefresh]);
 
   async function handleDelete(id) {
     if (confirm("Bạn có muốn xóa không?")) {
@@ -194,7 +194,7 @@ export default function page() {
                   type="text"
                   value={nameType}
                   onChange={(e) => setnameType(e.target.value)}
-                ></input>   
+                ></input>
                 <div className="flex space-x-4 mt-3">
                   <button
                     className="px-4 py-2 bg-green-500 text-white font-bold rounded hover:bg-green-700  basis-1/2 "
@@ -206,7 +206,7 @@ export default function page() {
                     className="px-4 py-2 bg-red-500 text-white font-bold rounded hover:bg-red-700  basis-1/2 "
                     onClick={closeModal}
                   >
-                    cancel  
+                    cancel
                   </button>
                 </div>
               </div>

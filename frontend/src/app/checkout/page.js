@@ -7,13 +7,16 @@ import { getCartByIdUser } from "@/services/cart/cart";
 export default function page() {
   const [cart, setCart] = useState([]);
 
-  useEffect(
-    () => async () => {
-      const respones = await getCartByIdUser(localStorage.getItem("idUser"));
+  useEffect(() => {
+    const fetchData = async () => {
+      const idUser = localStorage.getItem("idUser");
+      const respones = await getCartByIdUser(idUser);
       setCart(respones);
-    },
-    []
-  );
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div>
       <Checkout data={cart} />

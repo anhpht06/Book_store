@@ -15,6 +15,8 @@ services:
 
   backend:
     container_name: backend
+    env_file:
+      - .env.production
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -31,12 +33,22 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=061200
       - DB_DATABASE=book_store
+      - CLOUDINARY_CLOUD_NAME=dydapdphs
+      - CLOUDINARY_API_KEY=223632837488433
+      - CLOUDINARY_API_SECRET=nLj9EpijlxQK7b6u9UqUW67zciM
     depends_on:
       - postgres
     command: sh -c "node ace migration:run --force && node bin/server.js"
 
   frontend:
     container_name: frontend
+    env_file:
+      - .env.production
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:3333
+      - CLOUDINARY_CLOUD_NAME=dydapdphs
+      - CLOUDINARY_API_KEY=223632837488433
+      - CLOUDINARY_API_SECRET=nLj9EpijlxQK7b6u9UqUW67zciM
     build:
       context: ./frontend
       dockerfile: Dockerfile

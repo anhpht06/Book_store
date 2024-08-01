@@ -12,29 +12,28 @@ export default function CcategoryBook({ id }) {
   const [idType, setIdType] = useState([]);
   const [category, setCategory] = useState([]);
 
-  useEffect(
-    () => async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       const response = await SgetBookByIdCate(id);
       setBooks(response?.data);
-
       setIdType(response?.data[0]?.typeBook?.id);
-    },
-    []
-  );
+    };
+    fetchData();
+  }, []);
 
-  useEffect(
-    () => async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       const response = await ScategoryBook(idType);
       setCategory(response?.data);
-    },
-    []
-  );
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="flex flex-col m-6 ml-14">
       <div className="flex flex-row  items-center">
         <Link href={`/type-book/${idType}`} className="text-xl ">
-          {books?.[0]?.typeBook?.nameType}
+          {books && books?.[0]?.typeBook?.nameType}
         </Link>
         <img
           className="w-4 h-4 ml-1"

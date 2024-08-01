@@ -8,6 +8,7 @@ export default async function Slogin(email, password) {
   };
 
   try {
+    console.log("HTTP: test: " + API_USER() + "/login");
     const response = await axios.post(API_USER() + "/login", data);
     console.log(response.data);
     if (response.data.status === "SUCCESS") {

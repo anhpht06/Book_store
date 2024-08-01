@@ -11,6 +11,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { Button } from "@headlessui/react";
+import { SgetDetailBook } from "@/services/book/book";
 
 export default function Cart() {
   const [isloading, setIsloading] = useState(false);
@@ -20,8 +21,8 @@ export default function Cart() {
   const [amount, setAmount] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
 
-  useEffect(
-    () => async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       if (localStorage.getItem("idUser") == null)
         return (window.location.href = "/login");
       const response = await getCartByIdUser(localStorage.getItem("idUser"));
@@ -38,11 +39,19 @@ export default function Cart() {
         });
         setSubtotal(newSubtotal);
       }
-    },
-    [isRefresh]
-  );
+    };
+    fetchData();
+  }, [isRefresh]);
 
   async function handlePlusQuantity(book_id, amount) {
+    const res = await SgetDetailBook(book_id);
+
+    console.log("amount:",amount);
+    if (amount >= res.data.amount) {
+      toast.error("Số lượng sách trong kho không đủ");
+      return;
+    }
+
     const data = {
       user_id: localStorage.getItem("idUser"),
       book_id: book_id,

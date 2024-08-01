@@ -11,10 +11,10 @@ router
     router.get('/login/:email', [UsersController, 'getIdUserByEmail'])
     router.post('/logout', [UsersController, 'logout'])
     router.delete('/delete/:id', [UsersController, 'delete'])
-    router.get('/', [UsersController, 'getAllProfileUser'])
+    router.get('/', [UsersController, 'getAllUser'])
     router
       .group(() => {
-        router.get('', [UsersController, 'getAllUser'])
+        router.get('/', [UsersController, 'getAllProfileUser'])
         router.get('/:id', [UsersController, 'getProUserById'])
         router.put('/:id', [UsersController, 'updateProfieUser'])
       })
@@ -55,6 +55,7 @@ router
     router.get('/:id', [BooksController, 'showBookById'])
     router.post('/create', [BooksController, 'createBook'])
     router.put('/update/:id', [BooksController, 'updateBook'])
+    router.put('/update-quantity', [BooksController, 'updateAmoutBook'])
     router.delete('/delete/:id', [BooksController, 'deleteBook'])
   })
   .prefix('/books')

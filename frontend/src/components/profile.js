@@ -17,19 +17,19 @@ export default function Profile({ id }) {
   const [address, setaddress] = useState("");
   const [error, setError] = useState("");
 
-  useEffect(
-    () => async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       const response = await Sprofile(id);
-      
+
       setProfile(response.data);
       setUserName(response.data.userName);
       setPhone(response.data.phone);
       setAge(response.data.age);
       setgender(response.data.gender);
       setaddress(response.data.address);
-    },
-    [isUpdate]
-  );
+    };
+    fetchData();
+  }, [isUpdate]);
 
   async function handleUpdateProfile() {
     const data = {
@@ -39,7 +39,7 @@ export default function Profile({ id }) {
       gender: gender,
       address: address,
     };
-    // toast.success("Update success");
+
 
     const response = await SUpdateProfile(id, data);
     console.log(response.data);

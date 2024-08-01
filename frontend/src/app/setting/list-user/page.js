@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import SideBarSetting from "@/components/SideBarSetting";
-import { SgetAllProfile,SdeleteUser } from "@/services/auth/profile";
+import { SgetAllProfile, SdeleteUser } from "@/services/auth/profile";
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,18 +17,18 @@ export default function page() {
       toast.error(message);
     }
   }
-  useEffect(
-    () => async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       const respones = await SgetAllProfile();
       setProfile(respones.data);
-    },
-    [isRefresh]
-  );
+    };
+    fetchData();
+  }, [isRefresh]);
 
   async function handleDelete(id, email) {
     if (confirm("Bạn có muốn xóa không?")) {
       const respones = await SdeleteUser(id);
-      
+
       if (respones?.status === "200") {
         setIsRefresh(!isRefresh);
         toastify(`Delete ${email} success`, true);

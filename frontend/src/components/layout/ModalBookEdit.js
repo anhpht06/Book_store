@@ -51,7 +51,7 @@ const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book, isRefresh }) => {
   }, [isRefresh]);
 
   useEffect(() => {
-    const getTypes = async () => {
+    const fetchData = async () => {
       const types = await StypeBook();
       setTypes(types.data);
       const auther = await getAllauther();
@@ -59,7 +59,7 @@ const ModalBookEdit = ({ isOpen, onClose, onCloseSave, book, isRefresh }) => {
       const category = await ScategoryBook(idType);
       setCategory(category?.data);
     };
-    getTypes();
+    fetchData();
   }, [idType]);
 
   async function handleEditBook() {

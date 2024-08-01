@@ -14,15 +14,11 @@ export default async function Sbook() {
 
 export async function ScreateBook(formData) {
   try {
-    const response = await axios.post(API_BOOKS()+
-      "/create",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await axios.post(API_BOOKS() + "/create", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     return response.data;
   } catch (error) {
@@ -32,15 +28,11 @@ export async function ScreateBook(formData) {
 export async function SupdateBook(id, formData) {
   console.log("tuasdfasdf", id);
   try {
-    const response = await axios.put(API_BOOKS()+
-      "/update/" + id,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await axios.put(API_BOOKS() + "/update/" + id, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data;
   } catch (error) {
     return error;
@@ -49,9 +41,7 @@ export async function SupdateBook(id, formData) {
 
 export async function SgetBookByIdCate(id) {
   try {
-    const respones = await axios.get(API_BOOKS()+
-      "/category/" + id
-    );
+    const respones = await axios.get(API_BOOKS() + "/category/" + id);
 
     return respones.data;
   } catch (error) {}
@@ -59,7 +49,7 @@ export async function SgetBookByIdCate(id) {
 
 export async function SgetBookById(id) {
   try {
-    const respones = await axios.get(API_BOOKS()+"/" + id);
+    const respones = await axios.get(API_BOOKS() + "/" + id);
     if (respones.status === 200) {
       return respones.data;
     } else if (respones.status === 404) {
@@ -71,9 +61,7 @@ export async function SgetBookById(id) {
 }
 export async function SgetDetailBook(id) {
   try {
-    const respones = await axios.get(API_BOOKS()+
-      "/detail-book/" + id
-    );
+    const respones = await axios.get(API_BOOKS() + "/detail-book/" + id);
     console.log(id);
     if (respones.status === 200) {
       return respones.data;
@@ -99,9 +87,7 @@ export async function SgetAllBook() {
 }
 export async function SdeleteBook(id) {
   try {
-    const response = await axios.delete(API_BOOKS()+
-      "/delete/" + id
-    );
+    const response = await axios.delete(API_BOOKS() + "/delete/" + id);
 
     console.log(response);
     if (response.status === 200) {
@@ -109,6 +95,14 @@ export async function SdeleteBook(id) {
     } else if (response.status === 404) {
       return response.data;
     }
+  } catch (error) {
+    return error;
+  }
+}
+export async function SupdateQuantity(data) {
+  try {
+    const response = await axios.put(API_BOOKS() + "/update-quantity/", data);
+    return response.data;
   } catch (error) {
     return error;
   }

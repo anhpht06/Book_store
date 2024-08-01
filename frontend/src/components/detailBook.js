@@ -20,6 +20,7 @@ export default function CdetailBook({ idBook, book }) {
   const [messages, setMessages] = useState("");
   //data sent to backend
   const [amout, setAmout] = useState(1);
+  const [quantity, setQuantity] = useState(0);
 
   function toastify(messages, isAddToCart) {
     if (isAddToCart) {
@@ -30,17 +31,11 @@ export default function CdetailBook({ idBook, book }) {
   }
 
   useEffect(() => {
-    if (amout < 1) {
-      setAmout(1);
-    }
-  }, [amout]);
-
-  useEffect(
-    () => async () => {
+    const fetchData = async () => {
       const respones = await SgetDetailBook(idBook);
-
       if (respones?.status === "200") {
         setDetailBook(respones?.data);
+        setQuantity(respones?.data.amount);
         console.log("data");
       } else if (respones?.status === "404") {
         setError(respones?.messages);
@@ -49,9 +44,23 @@ export default function CdetailBook({ idBook, book }) {
       if (!localStorage.getItem("token")) {
         window.location.href = "/login";
       }
-    },
-    []
-  );
+    };
+    fetchData();
+    console.log("1", detailBook);
+  }, [idBook]);
+
+  if (amout < 1) {
+    setAmout(1);
+  }
+  useEffect(() => {
+    console.log(amout);
+    if (amout > quantity) {
+      setAmout(quantity);
+    }
+    if (amout < 1) {
+      setAmout(1);
+    }
+  }, [amout]);
 
   async function handlerAddToCart() {
     const data = {
@@ -144,6 +153,13 @@ export default function CdetailBook({ idBook, book }) {
                 <h1>Nhà xuất bản</h1>
                 <h1 className="font-bold">{detailBook?.publisher || "NaN"}</h1>
               </div>
+
+              <div className="flex flex-col ml-20">
+                <h1>Số lượng sách</h1>
+                <h1 className="font-bold text-center">
+                  {detailBook?.amount || "0"}
+                </h1>
+              </div>
             </div>
           </div>
 
@@ -151,6 +167,8 @@ export default function CdetailBook({ idBook, book }) {
             <div className="flex gap-2 mt-6">
               <label>Số lượng: </label>
               <input
+                max={detailBook?.amount}
+                min={1}
                 value={amout}
                 onChange={(e) => setAmout(e.target.value)}
                 className="border border-black rounded-sm  w-14"
@@ -159,46 +177,96 @@ export default function CdetailBook({ idBook, book }) {
             </div>
 
             <div className="flex row mt-3">
-              <button
-                onClick={handlerAddToCart}
-                className=" mr-3 border border-green-500 bg-green-300 hover:bg-green-600 text-black font-bold py-2 px-4 rounded-full flex items-center"
-              >
-                <svg
-                  className="w-4 h-4 text-black mr-2"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  strokeLinecap="round"
+              {detailBook?.amount >= 1 ? (
+                <button
+                  type="button"
+                  onClick={handlerAddToCart}
+                  className=" mr-3 border border-green-500 bg-green-300 hover:bg-green-600 text-black font-bold py-2 px-4 rounded-full flex items-center"
                 >
-                  <path
+                  <svg
+                    className="w-4 h-4 text-black mr-2"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
                     strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-                  />
-                </svg>
-                {isLoading ? "Loading..." : "Thêm vào giỏ hàng"}
-              </button>
-              <Button
-                type="button"
-                onClick={handlerBuyProduct}
-                className="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-full flex items-center"
-              >
-                <svg
-                  strokeLinecap="round"
-                  className="w-4 h-4 text-gray-500 mr-2"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                    />
+                  </svg>
+                  {isLoading ? "Loading..." : "Thêm vào giỏ hàng"}
+                </button>
+              ) : (
+                <button
+                  disabled
+                  type="button"
+                  className=" mr-3 border border-gray-500 bg-gray-300  text-black font-bold py-2 px-4 rounded-full flex items-center"
                 >
-                  <path
-                    d="M4 2C4 1.44772 4.44772 1 5 1H19C19.5523 1 20 1.44772 20 2V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V2ZM5 0C3.34315 0 2 1.34315 2 3V21C2 22.6569 3.34315 24 5 24H19C20.6569 24 22 22.6569 22 21V3C22 1.34315 20.6569 0 19 0H5ZM5 3H19V21H5V3ZM9 8C8.44772 8 8 8.44772 8 9V13C8 13.5523 8.44772 14 9 14H15C15.5523 14 16 13.5523 16 13V9C16 8.44772 15.5523 8 15 8H9ZM9 9H15V13H9V9ZM7 4C7 3.44772 7.44772 3 8 3H16C16.5523 3 17 3.44772 17 4C17 4.55228 16.5523 5 16 5H8C7.44772 5 7 4.55228 7 4Z"
-                    fill="#000000"
-                  />
-                </svg>
-                Mua sách
-              </Button>
+                  <svg
+                    className="w-4 h-4 text-black mr-2"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                    />
+                  </svg>
+                  {isLoading ? "Loading..." : "Thêm vào giỏ hàng"}
+                </button>
+              )}
+
+              {detailBook?.amount >= 1 ? (
+                <Button
+                  type="button"
+                  onClick={handlerBuyProduct}
+                  className="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-full flex items-center"
+                >
+                  <svg
+                    strokeLinecap="round"
+                    className="w-4 h-4 text-gray-500 mr-2"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M4 2C4 1.44772 4.44772 1 5 1H19C19.5523 1 20 1.44772 20 2V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V2ZM5 0C3.34315 0 2 1.34315 2 3V21C2 22.6569 3.34315 24 5 24H19C20.6569 24 22 22.6569 22 21V3C22 1.34315 20.6569 0 19 0H5ZM5 3H19V21H5V3ZM9 8C8.44772 8 8 8.44772 8 9V13C8 13.5523 8.44772 14 9 14H15C15.5523 14 16 13.5523 16 13V9C16 8.44772 15.5523 8 15 8H9ZM9 9H15V13H9V9ZM7 4C7 3.44772 7.44772 3 8 3H16C16.5523 3 17 3.44772 17 4C17 4.55228 16.5523 5 16 5H8C7.44772 5 7 4.55228 7 4Z"
+                      fill="#000000"
+                    />
+                  </svg>
+                  Mua sách
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  disabled
+                  // onClick={handlerBuyProduct}
+                  className="bg-gray-400  text-white font-bold py-2 px-4 rounded-full flex items-center"
+                >
+                  <svg
+                    strokeLinecap="round"
+                    className="w-4 h-4 text-gray-500 mr-2"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M4 2C4 1.44772 4.44772 1 5 1H19C19.5523 1 20 1.44772 20 2V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V2ZM5 0C3.34315 0 2 1.34315 2 3V21C2 22.6569 3.34315 24 5 24H19C20.6569 24 22 22.6569 22 21V3C22 1.34315 20.6569 0 19 0H5ZM5 3H19V21H5V3ZM9 8C8.44772 8 8 8.44772 8 9V13C8 13.5523 8.44772 14 9 14H15C15.5523 14 16 13.5523 16 13V9C16 8.44772 15.5523 8 15 8H9ZM9 9H15V13H9V9ZM7 4C7 3.44772 7.44772 3 8 3H16C16.5523 3 17 3.44772 17 4C17 4.55228 16.5523 5 16 5H8C7.44772 5 7 4.55228 7 4Z"
+                      fill="#000000"
+                    />
+                  </svg>
+                  Mua sách
+                </Button>
+              )}
 
               <button
                 onClick={handleClickIsLove}

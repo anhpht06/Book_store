@@ -6,18 +6,22 @@ import { useState, useEffect } from "react";
 export default function page({ params }) {
   const [cart, setCart] = useState([]);
 
-  useEffect(
-    () => async () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const idUser = localStorage.getItem("idUser");
+      const idCart = params.id;
+
       const data = {
-        user_id: localStorage.getItem("idUser"),
-        cart_id: params.id,
+        user_id: idUser,
+        cart_id: idCart,
       };
       const respones = await getCartByIdCart(data);
-      console.log(respones);
       setCart(respones);
-    },
-    []
-  );
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div>
       <Checkout data={cart} />

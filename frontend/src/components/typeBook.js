@@ -8,16 +8,16 @@ export default function CtypeBook({ id }) {
   const [category, setCategory] = useState([]);
   const [typeBook, setTypeBook] = useState([]);
 
-  useEffect(
-    () => async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       const res1 = await ScategoryBook(id);
       setCategory(res1.data);
       console.log(res1.data);
       const res2 = await SgetTypeBookById(id);
       setTypeBook(res2.data);
-    },
-    []
-  );
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="flex  items-center  m-5 ml-10 mt-10 ">

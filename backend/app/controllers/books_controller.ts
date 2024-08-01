@@ -8,7 +8,7 @@ import cloudinary from '#config/cloud'
 
 export default class BooksController {
   //Type book
-  
+
   async getTypeBookById(ctx: HttpContext) {
     const typeBook = await TypeBook.findOrFail(ctx.params.id)
     if (Object.keys(typeBook).length === 0) {
@@ -54,7 +54,9 @@ export default class BooksController {
   }
 
   async showListCategoryBookToType(ctx: HttpContext) {
+    if (!ctx.params.id) return ctx.response.notFound({ messages: 'not found' })
     const categoryBooks = await CategoryBook.query().where('type_book_id', ctx.params.id)
+
     if (Object.keys(categoryBooks).length === 0) {
       return ctx.response.json({ status: '404', messages: 'not found' })
     }
@@ -151,7 +153,7 @@ export default class BooksController {
       .preload('detailBook')
 
     if (Object.keys(book).length === 0) {
-      return ctx.response.notFound({ status: '404', messages: 'not found' })
+      return ctx.response.notFound({ status: '404', messages: 'books not found' })
     }
     return ctx.response.ok({ status: '200', messages: 'success', data: book })
   }
@@ -231,6 +233,43 @@ export default class BooksController {
       dataDetail,
     })
   }
+  async updateAmoutBook(ctx: HttpContext) {
+    try {
+      const { id, amount } = ctx.request.body()
+      const book = {
+        id,
+        amount,
+      }
+      const bookUpdates = book.id.map((id: number, amount: number) => ({
+        id: id,
+        amount: book.amount[amount],
+      }))
+
+      for (const book of bookUpdates) {
+        const { id, amount } = book
+        if (isNaN(amount) || amount <= 0) {
+          return ctx.response.badRequest({
+            status: '400',
+            message: `Invalid amount for book id ${id}`,
+          })
+        }
+        const dataDetail = await DetailBook.findOrFail(id)
+        if (dataDetail.amount - amount < 0) {
+          return ctx.response.badRequest({
+            status: '400',
+            message: `Insufficient stock for book id ${id}`,
+          })
+        }
+        dataDetail.amount = dataDetail.amount - amount
+        await dataDetail.save()
+      }
+      return ctx.response.ok({ status: '200', message: 'Update success' })
+    } catch (error) {
+      console.error('Error updating book amounts:', error)
+      return ctx.response.internalServerError({ status: '500', message: 'Internal Server Error' })
+    }
+  }
+
   async deleteBook(ctx: HttpContext) {
     const book = await Book.findBy('id', ctx.params.id)
     await book?.delete()
