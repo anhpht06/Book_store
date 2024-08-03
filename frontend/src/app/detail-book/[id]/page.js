@@ -28,7 +28,7 @@ export default function page({ params }) {
           {notFound ? (
             "Not Found"
           ) : (
-            <CdetailBook idBook={params.id} book={book} />
+            <CdetailBook idBook={book} book={book} />
           )}
         </div>
       ) : (

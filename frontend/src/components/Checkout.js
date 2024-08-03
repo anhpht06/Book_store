@@ -157,36 +157,36 @@ export default function checkout({ data }) {
           </thead>
           <tbody>
             {carts &&
-              carts?.map((items, index) => (
-                <tr key={items?.id}>
+              carts?.map((item, index) => (
+                <tr key={item?.id}>
                   <td>
                     <div className="flex gap-4  py-2">
                       <div className="base-1/2">
-                        <Image
-                          className="rounded-lg"
-                          src={items?.books[0].imageBook}
-                          height={40}
-                          width={40}
-                          priority={true}
-                          style={{ width: "auto", height: "auto" }}
-                          alt={items?.books[0].nameBook}
-                        />
+                      <Image
+                        className="rounded-lg"
+                        src={item.books[0].imageBook}
+                        height={85}
+                        width={100}
+                        priority={true}
+                        style={{ width: "auto", height: "auto" }}
+                        alt={item.books[0].nameBook}
+                      />
                       </div>
                       <div className=" basis-1/2 flex flex-col">
                         <h1 className="font-bold">
-                          {items?.books[0].nameBook}
+                          {item?.books[0].nameBook}
                         </h1>
-                        <h1>{items?.books[0].auther.name}</h1>
+                        <h1>{item?.books[0].auther.name}</h1>
                       </div>
                     </div>
                   </td>
                   <td className="text-center">
-                    {items?.books[0].detailBook.price}$
+                    {item?.books[0].detailBook.price}$
                   </td>
-                  <td className="text-center">{items?.amount}</td>
+                  <td className="text-center">{item?.amount}</td>
 
                   <td className="text-center text-red-500 font-bold ">
-                    {items?.books[0].detailBook.price * items?.amount}$
+                    {item?.books[0].detailBook.price * item?.amount}$
                   </td>
                 </tr>
               ))}

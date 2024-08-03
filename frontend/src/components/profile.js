@@ -4,7 +4,7 @@ import Sprofile, { SUpdateProfile } from "@/services/auth/profile";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.min.css";
 
 export default function Profile({ id }) {
   const [profile, setProfile] = useState([]);
@@ -16,6 +16,14 @@ export default function Profile({ id }) {
   const [gender, setgender] = useState("");
   const [address, setaddress] = useState("");
   const [error, setError] = useState("");
+
+  const notifySuccess = () => {
+    toast.success("Cập nhật thành công");
+  };
+
+  const notifyError = () => {
+    toast.error("Cập nhật thất bại");
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,17 +48,17 @@ export default function Profile({ id }) {
       address: address,
     };
 
-
     const response = await SUpdateProfile(id, data);
     console.log(response.data);
     if (response.data.status === "200") {
       console.log("thanh cong");
       setProfile(response.data);
       setIsUpdate(!isUpdate);
-      toast.success(response.message);
+      notifySuccess();
       setError("");
     } else if (response.data.status === "404") {
       console.log("that bai");
+      notifyError();
       setError("Số điện thoại đã được đăng ký!");
     }
   }

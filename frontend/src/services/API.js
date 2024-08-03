@@ -1,5 +1,5 @@
 import React from "react";
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
 const HTTP = apiBaseUrl;
 console.log("http api:::", HTTP);
 

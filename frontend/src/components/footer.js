@@ -2,13 +2,14 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-800 text-gray-300 p-4 absolute bottom-0 w-full" >
+    <div className="bg-gray-800 text-gray-300 py-4 w-full">
+      {/* <h1>fasdfasdfas</h1> */}
       <div className="container mx-auto">
-        <div className="flex items-center justify-between">
-          <p className="text-sm">
+        <div className="flex flex-row items-center justify-between">
+          <p className="text-sm ml-4">
             © 2024 Book Store Tuan Anh. All rights reserved.
           </p>
-          <div className="flex space-x-4">
+          <div className="flex flex-row mr-10 gap-4 ">
             <a href="#" className="text-gray-300 hover:text-white">
               About
             </a>
@@ -21,6 +22,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-    </footer>
+    </div>
   );
 }

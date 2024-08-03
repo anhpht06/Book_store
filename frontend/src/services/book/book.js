@@ -60,9 +60,10 @@ export async function SgetBookById(id) {
   }
 }
 export async function SgetDetailBook(id) {
+
   try {
     const respones = await axios.get(API_BOOKS() + "/detail-book/" + id);
-    console.log(id);
+
     if (respones.status === 200) {
       return respones.data;
     } else if (respones.status === 404) {

@@ -1,4 +1,5 @@
 "use client";
+import StarRatings from "react-star-ratings";
 import React from "react";
 import { useState, useEffect } from "react";
 import { SgetDetailBook } from "@/services/book/book";
@@ -7,8 +8,12 @@ import Image from "next/image";
 import { createCart } from "@/services/cart/cart";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getCartByIdBook } from "@/services/cart/cart";
+import Header from "./header";
+
 import { Button } from "@headlessui/react";
-export default function CdetailBook({ idBook, book }) {
+export default function CdetailBook({ book }) {
+  const [isReload, setIsReload] = useState(false);
   const [detailBook, setDetailBook] = useState([]);
   const [error, setError] = useState("");
 
@@ -21,6 +26,8 @@ export default function CdetailBook({ idBook, book }) {
   //data sent to backend
   const [amout, setAmout] = useState(1);
   const [quantity, setQuantity] = useState(0);
+  const [amoutCart, setAmoutCart] = useState(0);
+  const [amoutTextAddbyCart, setAmoutTextAddbyCart] = useState("");
 
   function toastify(messages, isAddToCart) {
     if (isAddToCart) {
@@ -29,31 +36,33 @@ export default function CdetailBook({ idBook, book }) {
       toast.error(messages);
     }
   }
-
   useEffect(() => {
     const fetchData = async () => {
-      const respones = await SgetDetailBook(idBook);
+      const respones = await SgetDetailBook(book?.id);
+
       if (respones?.status === "200") {
         setDetailBook(respones?.data);
         setQuantity(respones?.data.amount);
-        console.log("data");
       } else if (respones?.status === "404") {
         setError(respones?.messages);
       }
-
       if (!localStorage.getItem("token")) {
         window.location.href = "/login";
       }
+
+      const responesCart = await getCartByIdBook(
+        localStorage.getItem("idUser"),
+        book?.id
+      );
+      setAmoutCart(responesCart[0]?.amount);
     };
     fetchData();
-    console.log("1", detailBook);
-  }, [idBook]);
+  }, [isReload]);
 
   if (amout < 1) {
     setAmout(1);
   }
   useEffect(() => {
-    console.log(amout);
     if (amout > quantity) {
       setAmout(quantity);
     }
@@ -63,26 +72,37 @@ export default function CdetailBook({ idBook, book }) {
   }, [amout]);
 
   async function handlerAddToCart() {
+    console.log(amout);
+    console.log(amoutCart);
+    console.log(quantity);
+
+    if (Number(amout) + Number(amoutCart) > Number(quantity)) {
+      setAmoutTextAddbyCart("The number of books in stock is not enough");
+      return;
+    }
+    setAmoutTextAddbyCart("");
     const data = {
       user_id: localStorage.getItem("idUser"),
-      book_id: idBook,
+      book_id: book?.id,
       amount: amout,
     };
 
     setIsLoading(true);
     try {
       const respones = await createCart(data);
+      toastify("Add to cart success", true);
+      setIsReload(!isReload);
+
       return respones;
     } catch (error) {
     } finally {
-      toastify("Add to cart success", true);
       setIsLoading(false);
     }
   }
   async function handlerBuyProduct() {
     const data = {
       user_id: localStorage.getItem("idUser"),
-      book_id: idBook,
+      book_id: book?.id,
       amount: amout,
     };
 
@@ -99,7 +119,7 @@ export default function CdetailBook({ idBook, book }) {
 
   return (
     <div className="flex flex-col m-6">
-      <div className="flex flex-row">
+      <div className="flex flex-row ">
         <Link
           href={`/type-book/${book?.typeBook?.id}`}
           className="text-sm  mb-2"
@@ -117,13 +137,13 @@ export default function CdetailBook({ idBook, book }) {
       <div className="flex flex-row  ">
         <div className="basic-1/3">
           <Image
-            className="rounded-2xl"
+            className="rounded-lg"
             src={book?.imageBook || "/images/no-image.png"}
-            alt="Picture of the book"
-            width={260}
-            height={350}
-            priority={true}
+            width={200}
+            height={200}
+            alt={book.nameBook}
             style={{ width: "auto", height: "auto" }}
+            priority={true}
           />
         </div>
 
@@ -145,7 +165,7 @@ export default function CdetailBook({ idBook, book }) {
               <div className="flex flex-col ml-20">
                 <h1>Thể loại</h1>
                 <h1 className="font-bold">
-                  {book?.catetoryBook?.nameCategory}
+                  {book?.catetoryBook?.nameCategory || "NaN"}
                 </h1>
               </div>
 
@@ -164,7 +184,21 @@ export default function CdetailBook({ idBook, book }) {
           </div>
 
           <div className="flex flex-col mt-3">
-            <div className="flex gap-2 mt-6">
+            <h1 className="mt-2">
+              {" "}
+              {"giá tiền: "}
+              <span
+                style={{
+                  color: "red",
+                  fontWeight: "bold",
+                  fontSize: "1.5em",
+                }}
+              >
+                {`${detailBook?.price}$`}
+              </span>
+            </h1>
+            <h1 className="mt-1 text-sm text-red-500">{amoutTextAddbyCart}</h1>
+            <div className="flex gap-2 mt-5 ">
               <label>Số lượng: </label>
               <input
                 max={detailBook?.amount}
@@ -314,65 +348,70 @@ export default function CdetailBook({ idBook, book }) {
             </h1>
           </div>
 
-          <div className="flex flex-col mt-3 ">
-            <div className=" mt-2 flex flex-row  bg-gray-500 shadow-sm rounded-md ">
+          <div className="flex flex-col mt-3 bg-gray-500 shadow-sm rounded-md">
+            <div className=" mt-2 flex flex-row ">
               <div className="flex flex-row w-full h-full ">
-                <div className="flex flex-col m-4 ">
+                <div className="flex flex-col m-4">
                   <h1 className="text-5xl font-bold">5.0</h1>
                   <h1 className="mt-1 text-sm">5 đánh giá</h1>
                 </div>
 
-                <div className="basis-3/4 ml-6">
-                  <div className="">
-                    <div className="mt-4">
-                      <div className="mt-2">
-                        <div className="flex items-center mb-1">
-                          <span className="text-yellow-400 text-lg">
-                            ⭐⭐⭐⭐⭐{" "}
-                          </span>
-                          <div className="bg-gray-600 h-2 rounded-lg flex-grow ml-2">
-                            <div
-                              className="bg-yellow-400 h-full rounded-lg"
-                              style={{ width: "100%" }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="flex items-center mb-1">
-                          <span className="text-yellow-400 text-lg">
-                            ⭐⭐⭐⭐
-                          </span>
-                          <div className="bg-gray-600 h-2 rounded-lg flex-grow ml-2"></div>
-                        </div>
-                        <div className="flex items-center mb-1">
-                          <span className="text-yellow-400 text-lg">
-                            ⭐⭐⭐
-                          </span>
-                          <div className="bg-gray-600 h-2 rounded-lg flex-grow ml-2"></div>
-                        </div>
-                        <div className="flex items-center mb-1">
-                          <span className="text-yellow-400 text-lg">⭐⭐</span>
-                          <div className="bg-gray-600 h-2 rounded-lg flex-grow ml-2"></div>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="text-yellow-400 text-lg">⭐</span>
-                          <div className="bg-gray-600 h-2 rounded-lg flex-grow ml-2"></div>
-                        </div>
-                      </div>
-                    </div>
-                    <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-lg flex items-center ml-96">
-                      <svg
-                        strokeLinecap="round"
-                        className="w-4 h-4 mr-2"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M9 21H7V9h2v12zm8-2H11V5h2V3h2v2h2v14zm-8-4h8V5h2v10H9v-2zm-8-3H7V3H5v9H1v2z" />
-                      </svg>
-                      Viết đánh giá
-                    </button>
+                <div className="ml-4">
+                  <div className="mt-4 flex flex-col justify-end items-end">
+                    <span className="text-yellow-400 text-lg">⭐⭐⭐⭐⭐</span>
+                    <span className="text-yellow-400 text-lg">⭐⭐⭐⭐</span>
+                    <span className="text-yellow-400 text-lg">⭐⭐⭐</span>
+                    <span className="text-yellow-400 text-lg">⭐⭐</span>
+                    <span className="text-yellow-400 text-lg">⭐</span>
+                  </div>
+                </div>
+                <div className="basis-3/4 mr-4 ml-4 mt-7">
+                  <div className="bg-gray-600 h-2 rounded-lg flex-grow ml-2">
+                    <div
+                      className="bg-yellow-400 h-full rounded-lg"
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+                  <div className="bg-gray-600 h-2 rounded-lg flex-grow ml-2 mt-5">
+                    <div
+                      className="bg-yellow-400 h-full rounded-lg"
+                      style={{ width: "75%" }}
+                    />
+                  </div>
+                  <div className="bg-gray-600 h-2 rounded-lg flex-grow ml-2 mt-5">
+                    <div
+                      className="bg-yellow-400 h-full rounded-lg"
+                      style={{ width: "50%" }}
+                    />
+                  </div>
+                  <div className="bg-gray-600 h-2 rounded-lg flex-grow ml-2 mt-5">
+                    <div
+                      className="bg-yellow-400 h-full rounded-lg"
+                      style={{ width: "25%" }}
+                    />
+                  </div>
+                  <div className="bg-gray-600 h-2 rounded-lg flex-grow ml-2 mt-5">
+                    <div
+                      className="bg-yellow-400 h-full rounded-lg"
+                      style={{ width: "5%" }}
+                    />
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div className="flex justify-end mr-10 mb-4">
+              <button className="w-40 bg-green-500 text-white px-4 py-2 rounded-lg flex items-center">
+                <svg
+                  strokeLinecap="round"
+                  className="w-4 h-4 mr-2"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M9 21H7V9h2v12zm8-2H11V5h2V3h2v2h2v14zm-8-4h8V5h2v10H9v-2zm-8-3H7V3H5v9H1v2z" />
+                </svg>
+                Viết đánh giá
+              </button>
             </div>
           </div>
         </div>

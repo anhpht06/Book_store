@@ -43,12 +43,7 @@ services:
   frontend:
     container_name: frontend
     env_file:
-      - .env.production
-    environment:
-      - NEXT_PUBLIC_API_BASE_URL=http://localhost:3333
-      - CLOUDINARY_CLOUD_NAME=dydapdphs
-      - CLOUDINARY_API_KEY=223632837488433
-      - CLOUDINARY_API_SECRET=nLj9EpijlxQK7b6u9UqUW67zciM
+      - ./frontend/.env.production
     build:
       context: ./frontend
       dockerfile: Dockerfile

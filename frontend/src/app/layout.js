@@ -1,6 +1,6 @@
 import "../app/globals.css";
 import Header from "../components/header";
-
+import Footer from "../components/footer";
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -12,10 +12,10 @@ export default function RootLayout({ children }) {
           href="https://cdn-icons-png.flaticon.com/512/4212/4212474.png"
         />
       </head>
-      <body suppressHydrationWarning={true}>
+      <body suppressHydrationWarning={true} className="flex flex-col min-h-screen">
         <Header />
-        {children}
-        {/* <Footer /> */}
+        <main className="flex-grow">{children}</main>
+        <Footer />
       </body>
     </html>
   );

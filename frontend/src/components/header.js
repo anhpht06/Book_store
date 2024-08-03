@@ -4,13 +4,12 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import StypeBook from "@/services/book/typeBook";
 import { usePathname } from "next/navigation";
-
 import { getCartByIdUser } from "@/services/cart/cart";
 import { getOrderByUser } from "@/services/order/order";
+import { API_CART } from "@/services/API";
 
-export default function Header() {
+export default function Header({ data }) {
   const currentTypeBook = usePathname().split("/type-book/")[1] || "";
-
   const [amoutItemCart, setAmoutItemCart] = useState(0);
   const [amountItemOder, setAmountItemOder] = useState(0);
 
@@ -18,7 +17,6 @@ export default function Header() {
     const fetchData = async () => {
       try {
         const respones = await getCartByIdUser(localStorage.getItem("idUser"));
-        console.log(respones);
         if (respones.status === "404") {
           setAmoutItemCart(0);
         } else {
@@ -35,8 +33,9 @@ export default function Header() {
         console.log(error);
       }
     };
+
     fetchData();
-  }, []);
+  }, [usePathname]); // Cập nhật dữ liệu khi đường dẫn thay đổi
 
   function handleLogout() {
     if (confirm("Do you want to logout?")) {

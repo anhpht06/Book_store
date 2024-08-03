@@ -13,9 +13,8 @@ export default function Order() {
       window.location.href = "/login";
     }
   }, []);
-  useEffect(
-    () =>  {
-      const fetchData = async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       const response = await getOrderByUser(localStorage.getItem("idUser"));
       if (response?.status === "404") {
         setOrder([]);
@@ -24,9 +23,7 @@ export default function Order() {
       }
     };
     fetchData();
-    },
-    []
-  );
+  }, []);
   function henlderCreated_at(date) {
     const newDate = new Date(date);
     const options = {
@@ -43,15 +40,15 @@ export default function Order() {
   }
   return (
     <div>
-      <div className="w-full h-full bg-gray-300 flex flex-col items-center">
+      <div className="w-full bg-gray-300 flex flex-col items-center">
         <div className="w-full h-28 bg-white flex flex-row shadow-md">
           <h1 className="text-2xl font-bold w-fit h-fit  mt-9 ml-40">
             My Purchase
           </h1>
         </div>
 
-        <div className="mt-2 h-fit  w-4/5 flex flex-col ">
-          <table className="table-fixed  ">
+        <div className="mt-2  w-4/5 flex flex-col ">
+          <table className="table-auto ">
             <thead className="bg-white shadow-sm ">
               <tr className="flex flex-row m-4 ">
                 <th className="text-start basis-3/4">Product</th>
@@ -68,8 +65,8 @@ export default function Order() {
                       className="flex flex-row mt-4 bg-white rounded-sm shadow-lg"
                       key={items.id}
                     >
-                      <div className="flex flex-col basis-full divide-y-2">
-                        <td className="basis-full m-4 flex flex-col">
+                      <td className="flex flex-col basis-full divide-y-2">
+                        <div className="basis-full m-4 flex flex-col">
                           <div className="flex flex-col divide-y-2 divide-gray-300">
                             {items.books.map((book) => (
                               <div className="flex flex-row mb-4" key={book.id}>
@@ -100,7 +97,7 @@ export default function Order() {
                               </div>
                             ))}
                           </div>
-                        </td>
+                        </div>
                         <div className="flex flex-row basis-full  items-center mr-4 mb-4 ">
                           <h1 className=" text-sm mt-2 basis-3/4 ml-4">
                             Mua hàng {henlderCreated_at(items.created_at)}
@@ -114,11 +111,22 @@ export default function Order() {
                             </h1>
                           </div>
                         </div>
-                      </div>
+                      </td>
                     </tr>
                   ))}
             </tbody>
           </table>
+
+          {order.length === 0 && (
+            <Image
+              src={"/images/empty-cart.png"}
+              width={400}
+              height={400}
+              alt="empty-cart"
+              style={{ width: "auto", height: "auto" }}
+              priority={true}
+            />
+          )}
         </div>
 
         <ToastContainer />
