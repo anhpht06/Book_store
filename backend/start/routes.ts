@@ -69,6 +69,7 @@ router
     router.put('/update', [CartsController, 'updateCart'])
     router.delete('/delete/:id', [CartsController, 'deleteCart'])
     router.post('/delete', [CartsController, 'deleteCartWhenOrder'])
+    router.post('/book', [CartsController, 'getCartByIdBook'])
   })
   .prefix('/cart')
 

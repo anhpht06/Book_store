@@ -12,7 +12,18 @@ export default class CartsController {
     return ctx.response.ok({ status: '200', messages: 'success', data: response })
   }
 
-  //get cart by id
+  //get cart by id book
+  async getCartByIdBook(ctx: HttpContext) {
+    const { user_id, book_id } = ctx.request.body()
+
+    const response = await Cart.query().where('user_id', user_id).where('book_id', book_id)
+
+    if (Object.keys(response).length === 0) {
+      return ctx.response.json({ status: '404', messages: 'not found' })
+    }
+    return ctx.response.ok({ status: '200', messages: 'success', data: response })
+  }
+  //get cart by id user
   async getCartByIdUser(ctx: HttpContext) {
     const response = await Cart.query()
       .where('user_id', ctx.params.id)
@@ -26,7 +37,7 @@ export default class CartsController {
     }
     return ctx.response.ok({ status: '200', messages: 'success', data: response })
   }
-  //get cart by id book
+  //get cart by id cart
   async getCartByIdCart(ctx: HttpContext) {
     const { user_id, cart_id } = ctx.request.body()
     const response = await Cart.query()
@@ -104,10 +115,10 @@ export default class CartsController {
   }
 
   async deleteCartWhenOrder(ctx: HttpContext) {
-    const {cart_ids} = ctx.request.body()
+    const { cart_ids } = ctx.request.body()
 
     const cart = await Cart.query().whereIn('id', cart_ids).delete()
-  
+
     if (!cart) {
       return ctx.response.status(404).json({ status: '404', message: 'Cart not found' })
     }

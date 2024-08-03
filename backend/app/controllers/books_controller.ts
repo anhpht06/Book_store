@@ -117,6 +117,10 @@ export default class BooksController {
   }
 
   async showDetailBookByIdBook(ctx: HttpContext) {
+    const bookId = ctx.params.id
+    if (!bookId) {
+      return ctx.response.notFound({ status: '404', messages: 'bookId not found' })
+    }
     const book = await DetailBook.query().where('book_id', ctx.params.id).first()
     if (book === null) {
       return ctx.response.json({
