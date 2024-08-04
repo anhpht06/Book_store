@@ -3,26 +3,25 @@ import React from "react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import StypeBook from "@/services/book/typeBook";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { getCartByIdUser } from "@/services/cart/cart";
 import { getOrderByUser } from "@/services/order/order";
 import { API_CART } from "@/services/API";
 
-export default function Header({ data }) {
+export default function Header() {
+  const router = useRouter();
   const currentTypeBook = usePathname().split("/type-book/")[1] || "";
-  const [amoutItemCart, setAmoutItemCart] = useState(0);
   const [amountItemOder, setAmountItemOder] = useState(0);
-
-  console.log("load lai header");
+  const [amoutItemCart, setAmoutItemCart] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const respones = await getCartByIdUser(localStorage.getItem("idUser"));
-        if (!respones) return;
-        if (respones.status === "404") {
+        const carts = await getCartByIdUser(localStorage.getItem("idUser"));
+        if (!carts) return;
+        if (carts.status === "404") {
           setAmoutItemCart(0);
         } else {
-          setAmoutItemCart(Object.keys(respones).length);
+          setAmoutItemCart(Object.keys(carts).length);
         }
 
         const respones2 = await getOrderByUser(localStorage.getItem("idUser"));

@@ -10,9 +10,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCartByIdBook } from "@/services/cart/cart";
 import Header from "./header";
-
 import { Button } from "@headlessui/react";
+import { fromJSON } from "postcss";
+import { usePathname, useRouter } from "next/navigation";
+
 export default function CdetailBook({ book }) {
+  const router = useRouter();
+
   const [isReload, setIsReload] = useState(false);
   const [detailBook, setDetailBook] = useState([]);
   const [error, setError] = useState("");
@@ -23,12 +27,15 @@ export default function CdetailBook({ book }) {
 
   const [isAddToCart, setIsAddToCart] = useState(false);
   const [messages, setMessages] = useState("");
+  const [refresh, setRefresh] = useState(0);
+
   //data sent to backend
   const [amout, setAmout] = useState(1);
   const [quantity, setQuantity] = useState(0);
   const [amoutCart, setAmoutCart] = useState(0);
   const [amoutTextAddbyCart, setAmoutTextAddbyCart] = useState("");
-  const [refresh, setRefresh] = useState(0);
+
+  // const path = usePathname();
 
   function toastify(messages, isAddToCart) {
     if (isAddToCart) {
@@ -70,11 +77,11 @@ export default function CdetailBook({ book }) {
   }, [amout]);
 
   async function handlerAddToCart() {
+    // router.refresh();
     if (!localStorage.getItem("token")) {
       toastify("Please login first", false);
       return;
     }
-
     if (Number(amout) + Number(amoutCart) > Number(quantity)) {
       setAmoutTextAddbyCart("The number of books in stock is not enough");
       return;
@@ -90,6 +97,7 @@ export default function CdetailBook({ book }) {
     try {
       const respones = await createCart(data);
       toastify("Add to cart success", true);
+
       setIsReload(!isReload);
 
       return respones;
