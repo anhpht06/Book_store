@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function DropdownCategoryBook({ category, nameCategory }) {
@@ -12,7 +13,7 @@ export default function DropdownCategoryBook({ category, nameCategory }) {
       <div>
         <button
           type="button"
-          className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+          className=" no-select hidden-caret inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
           onClick={handleClick}
         >
           {nameCategory || "Chọn thể loại"}
@@ -28,14 +29,14 @@ export default function DropdownCategoryBook({ category, nameCategory }) {
             aria-labelledby="options-menu"
           >
             {category?.map((item) => (
-              <a
+              <Link
                 href={`/category-book/${item.id}`}
                 key={item.id}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
                 {item.nameCategory}
-              </a>
+              </Link>
             ))}
           </div>
         </div>

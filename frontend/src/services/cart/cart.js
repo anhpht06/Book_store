@@ -35,6 +35,7 @@ export async function getCartByIdBook(idUser, idBook) {
   }
 }
 export async function getCartByIdUser(id) {
+  if (id === null) return;
   const respones = await axios.get(API_CART() + "/" + id);
   if (respones.data.status === "200") {
     return respones.data.data;

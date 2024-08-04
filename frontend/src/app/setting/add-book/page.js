@@ -55,7 +55,7 @@ export default function page() {
     }
   }
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row no-select">
       <SideBarSetting className="w-1/3" />
 
       <div className="m-3 rounded-lg text-white w-full bg-gray-800 ">

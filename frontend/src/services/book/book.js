@@ -12,6 +12,15 @@ export default async function Sbook() {
   }
 }
 
+export async function getBookByIdTypeBook(typeBookId) {
+  try {
+    if (typeBookId === undefined) return;
+    const respones = await axios.get(API_BOOKS() + "/type-book/" + typeBookId);
+    return respones.data;
+  } catch (error) {
+    console.log("error:::", error.response.status);
+  }
+}
 export async function ScreateBook(formData) {
   try {
     const response = await axios.post(API_BOOKS() + "/create", formData, {
@@ -60,7 +69,6 @@ export async function SgetBookById(id) {
   }
 }
 export async function SgetDetailBook(id) {
-
   try {
     const respones = await axios.get(API_BOOKS() + "/detail-book/" + id);
 

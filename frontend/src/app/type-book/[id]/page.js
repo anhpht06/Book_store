@@ -7,7 +7,7 @@ export default function page({ params }) {
     <div>
       <title>Type Book</title>
 
-      <CtypeBook id={params.id} />
+      <CtypeBook typeBookID={params.id} />
     </div>
   );
 }

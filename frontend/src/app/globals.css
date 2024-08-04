@@ -12,4 +12,11 @@
   .no-spinner {
     -moz-appearance: textfield;
   }
+  .no-select {
+    user-select: none;
+  }
+
+  .hidden-caret {
+    caret-color: transparent;
+  }
 }

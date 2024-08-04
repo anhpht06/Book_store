@@ -13,10 +13,12 @@ export default function Header({ data }) {
   const [amoutItemCart, setAmoutItemCart] = useState(0);
   const [amountItemOder, setAmountItemOder] = useState(0);
 
+  console.log("load lai header");
   useEffect(() => {
     const fetchData = async () => {
       try {
         const respones = await getCartByIdUser(localStorage.getItem("idUser"));
+        if (!respones) return;
         if (respones.status === "404") {
           setAmoutItemCart(0);
         } else {
@@ -35,7 +37,7 @@ export default function Header({ data }) {
     };
 
     fetchData();
-  }, [usePathname]); // Cập nhật dữ liệu khi đường dẫn thay đổi
+  }, [usePathname()]); // Cập nhật dữ liệu khi đường dẫn thay đổi
 
   function handleLogout() {
     if (confirm("Do you want to logout?")) {
@@ -76,7 +78,7 @@ export default function Header({ data }) {
 
   return (
     <main>
-      <nav className="bg-gray-800  ">
+      <nav className="bg-gray-800  no-select hidden-caret">
         <div className=" px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center ">
             <Link href={"/"}>

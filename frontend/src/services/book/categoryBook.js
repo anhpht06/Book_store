@@ -2,9 +2,9 @@ import axios from "axios";
 import React from "react";
 import { API_CATEGORYBOOK } from "../API";
 export default async function ScategoryBook(id) {
+  if (id === "undefined") return;
   try {
     const response = await axios.get(API_CATEGORYBOOK() + "/" + id);
-
     return response.data;
   } catch (error) {
     return error;
@@ -21,6 +21,7 @@ export async function SgetAllCategoryBook() {
 }
 
 export async function SdeleteCategoryBook(id) {
+  if (id === undefined) return;
   try {
     const response = await axios.delete(API_CATEGORYBOOK() + "/delete/" + id);
     return response.data;

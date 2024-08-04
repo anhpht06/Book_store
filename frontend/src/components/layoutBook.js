@@ -1,11 +1,21 @@
 import React from "react";
 import Link from "next/link";
-import { CldImage } from "next-cloudinary";
 import Image from "next/image";
 
 export default function LayoutBook({ books }) {
+  if (!books)
+    return (
+      <div>
+        <Image
+          src={"/images/no-data-6.png"}
+          width={300}
+          height={300}
+          alt="empty-books"
+          priority
+        />
+      </div>
+    );
   return (
-    
     <div className="grid grid-cols-6 gap-x-5 gap-y-5">
       {books &&
         books?.map((book) => (

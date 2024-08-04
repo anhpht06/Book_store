@@ -48,13 +48,14 @@ export default class BooksController {
   async showListCategoryBook(ctx: HttpContext) {
     const categoryBooks = await CategoryBook.query().preload('typeBook')
     if (Object.keys(categoryBooks).length === 0) {
-      return ctx.response.notFound({ messages: 'not found' })
+      return ctx.response.notFound({ statu: '404', messages: 'not found' })
     }
-    return ctx.response.ok({ messages: 'success', data: categoryBooks })
+    return ctx.response.ok({ status: '200', messages: 'success', data: categoryBooks })
   }
 
   async showListCategoryBookToType(ctx: HttpContext) {
-    if (!ctx.params.id) return ctx.response.notFound({ messages: 'not found' })
+    if (!ctx.params.id) return ctx.response.notFound({ status: '404', messages: 'not found' })
+
     const categoryBooks = await CategoryBook.query().where('type_book_id', ctx.params.id)
 
     if (Object.keys(categoryBooks).length === 0) {
@@ -115,7 +116,15 @@ export default class BooksController {
     }
     return ctx.response.ok({ status: '200', messages: 'success', data: book })
   }
+  async showBookByIdType(ctx: HttpContext) {
+    const type_book_id = ctx.params.id
 
+    const response = await Book.query().where('type_book_id', type_book_id)
+    if (Object.keys(response).length === 0) {
+      return ctx.response.json({ status: '404', messages: 'not found' })
+    }
+    return ctx.response.ok({ status: '200', messages: 'success', data: response })
+  }
   async showDetailBookByIdBook(ctx: HttpContext) {
     const bookId = ctx.params.id
     if (!bookId) {
@@ -134,7 +143,6 @@ export default class BooksController {
       data: book,
     })
   }
-
   async showListBookByIdCategory(ctx: HttpContext) {
     console.log(ctx.params.id)
 
@@ -148,7 +156,6 @@ export default class BooksController {
     }
     return ctx.response.ok({ messages: 'success', data: book })
   }
-
   async showAllListBooks(ctx: HttpContext) {
     const book = await Book.query()
       .preload('typeBook')

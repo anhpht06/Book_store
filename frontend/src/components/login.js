@@ -121,9 +121,8 @@ export default function Login() {
             <Link
               href="/register"
               className="bg-blue-600  text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110 hover:bg-indigo-700 duration-300 hover:text-red-500"
-              disabled={loading}
             >
-              {loading ? "Loading..." : "Register"}
+              Register
             </Link>
           </div>
         </form>

@@ -57,6 +57,7 @@ router
     router.put('/update/:id', [BooksController, 'updateBook'])
     router.put('/update-quantity', [BooksController, 'updateAmoutBook'])
     router.delete('/delete/:id', [BooksController, 'deleteBook'])
+    router.get('/type-book/:id', [BooksController, 'showBookByIdType'])
   })
   .prefix('/books')
 

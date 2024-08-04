@@ -88,7 +88,7 @@ export default function Cart() {
   }
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full no-select hidden-caret">
       <div className=" ml-4 mt-6 flex flex-col">
         <h1 className="text-2xl font-bold">YOUR CART</h1>
         <h1>
@@ -231,8 +231,8 @@ export default function Cart() {
                   width={400}
                   height={400}
                   alt="empty-cart"
+                  priority
                   style={{ width: "auto", height: "auto" }}
-                  priority={true}
                 />
               ) : null}
             </div>

@@ -28,6 +28,7 @@ export default function CdetailBook({ book }) {
   const [quantity, setQuantity] = useState(0);
   const [amoutCart, setAmoutCart] = useState(0);
   const [amoutTextAddbyCart, setAmoutTextAddbyCart] = useState("");
+  const [refresh, setRefresh] = useState(0);
 
   function toastify(messages, isAddToCart) {
     if (isAddToCart) {
@@ -45,9 +46,6 @@ export default function CdetailBook({ book }) {
         setQuantity(respones?.data.amount);
       } else if (respones?.status === "404") {
         setError(respones?.messages);
-      }
-      if (!localStorage.getItem("token")) {
-        window.location.href = "/login";
       }
 
       const responesCart = await getCartByIdBook(
@@ -72,9 +70,10 @@ export default function CdetailBook({ book }) {
   }, [amout]);
 
   async function handlerAddToCart() {
-    console.log(amout);
-    console.log(amoutCart);
-    console.log(quantity);
+    if (!localStorage.getItem("token")) {
+      toastify("Please login first", false);
+      return;
+    }
 
     if (Number(amout) + Number(amoutCart) > Number(quantity)) {
       setAmoutTextAddbyCart("The number of books in stock is not enough");
@@ -100,6 +99,10 @@ export default function CdetailBook({ book }) {
     }
   }
   async function handlerBuyProduct() {
+    if (!localStorage.getItem("token")) {
+      toastify("Please login first", false);
+      return;
+    }
     const data = {
       user_id: localStorage.getItem("idUser"),
       book_id: book?.id,
@@ -118,7 +121,7 @@ export default function CdetailBook({ book }) {
   }
 
   return (
-    <div className="flex flex-col m-6">
+    <div className="flex flex-col m-6 no-select hidden-caret">
       <div className="flex flex-row ">
         <Link
           href={`/type-book/${book?.typeBook?.id}`}
@@ -126,10 +129,12 @@ export default function CdetailBook({ book }) {
         >
           {book?.typeBook?.nameType}
         </Link>
-        <h1 className="text-sm  mb-2 ml-1 mr-1">&gt; </h1>
+        <h1 className="text-sm  mb-2 ml-1 mr-1 no-select hidden-caret">
+          &gt;{" "}
+        </h1>
         <Link
           href={`/category-book/${book?.catetoryBook?.id}`}
-          className="text-sm  mb-2"
+          className="text-sm  mb-2 no-select hidden-caret"
         >
           {book?.catetoryBook?.nameCategory}
         </Link>
@@ -147,11 +152,13 @@ export default function CdetailBook({ book }) {
           />
         </div>
 
-        <div className="ml-12 flex flex-col divide-y divide-gray-500 basis-3/6">
+        <div className="ml-12 flex flex-col divide-y divide-gray-500 basis-3/6 no-select hidden-caret">
           <div className="flex flex-col ">
-            <h1 className="text-2xl font-bold mb-2">{book?.nameBook}</h1>
+            <h1 className="text-2xl font-bold mb-2 no-select hidden-caret">
+              {book?.nameBook}
+            </h1>
 
-            <div className="flex flex-row ">
+            <div className="flex flex-row no-select hidden-caret ">
               <h1>5.0 </h1>
               <h1 className="ml-1">★★★★★</h1>
               <h1 className="ml-8"> 5 đánh giá </h1>

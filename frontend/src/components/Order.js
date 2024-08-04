@@ -40,7 +40,7 @@ export default function Order() {
   }
   return (
     <div>
-      <div className="w-full bg-gray-300 flex flex-col items-center">
+      <div className="w-full bg-gray-300 flex flex-col items-center no-select hidden-caret">
         <div className="w-full h-28 bg-white flex flex-row shadow-md">
           <h1 className="text-2xl font-bold w-fit h-fit  mt-9 ml-40">
             My Purchase

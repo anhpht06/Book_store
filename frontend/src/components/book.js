@@ -31,7 +31,7 @@ export default function Book() {
   return (
     <div className="flex flex-col m-6 ml-14 ">
       <div>
-        <h1 className="text-xl font-bold mb-6">Tất cả các sách hiện có</h1>
+        <h1 className="text-xl font-bold mb-6 no-select hidden-caret">Tất cả các sách hiện có</h1>
       </div>
       <LayoutBook books={books} />
     </div>
