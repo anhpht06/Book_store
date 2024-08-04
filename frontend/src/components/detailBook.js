@@ -1,5 +1,4 @@
 "use client";
-import StarRatings from "react-star-ratings";
 import React from "react";
 import { useState, useEffect } from "react";
 import { SgetDetailBook } from "@/services/book/book";
@@ -9,33 +8,21 @@ import { createCart } from "@/services/cart/cart";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCartByIdBook } from "@/services/cart/cart";
-import Header from "./header";
 import { Button } from "@headlessui/react";
-import { fromJSON } from "postcss";
-import { usePathname, useRouter } from "next/navigation";
 
 export default function CdetailBook({ book }) {
-  const router = useRouter();
-
   const [isReload, setIsReload] = useState(false);
   const [detailBook, setDetailBook] = useState([]);
-  const [error, setError] = useState("");
 
   const [isLove, setIsLove] = useState(true);
   const [isShowFullText, setIsShowFullText] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [isAddToCart, setIsAddToCart] = useState(false);
-  const [messages, setMessages] = useState("");
-  const [refresh, setRefresh] = useState(0);
 
   //data sent to backend
   const [amout, setAmout] = useState(1);
   const [quantity, setQuantity] = useState(0);
   const [amoutCart, setAmoutCart] = useState(0);
   const [amoutTextAddbyCart, setAmoutTextAddbyCart] = useState("");
-
-  // const path = usePathname();
 
   function toastify(messages, isAddToCart) {
     if (isAddToCart) {
@@ -77,7 +64,6 @@ export default function CdetailBook({ book }) {
   }, [amout]);
 
   async function handlerAddToCart() {
-    // router.refresh();
     if (!localStorage.getItem("token")) {
       toastify("Please login first", false);
       return;
